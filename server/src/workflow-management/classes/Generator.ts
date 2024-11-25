@@ -22,6 +22,7 @@ import { getBestSelectorForAction } from "../utils";
 import { browserPool } from "../../server";
 import { uuid } from "uuidv4";
 import { capture } from "../../utils/analytics"
+import { encrypt } from "../../utils/auth";
 
 interface PersistedGeneratedData {
   lastUsedSelector: string;
@@ -797,7 +798,7 @@ export class WorkflowGenerator {
         // when more than one press action is present, add a type action
         pair.what.splice(index - input.actionCounter, input.actionCounter, {
           action: 'type',
-          args: [input.selector, input.value],
+          args: [input.selector, encrypt(input.value)],
         }, {
           action: 'waitForLoadState',
           args: ['networkidle'],
