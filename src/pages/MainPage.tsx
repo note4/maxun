@@ -98,9 +98,9 @@ export const MainPage = ({ handleEditRecording }: MainPageProps) => {
       socket.on('debugMessage', debugMessageHandler);
       setContent('runs');
       if (browserId) {
-        notify('info', `Running recording: ${runningRecordingName}`);
+        notify('info', `Running robot: ${runningRecordingName}`);
       } else {
-        notify('error', `Failed to run recording: ${runningRecordingName}`);
+        notify('error', `Failed to run robot: ${runningRecordingName}`);
       }
     })
     return (socket: Socket, browserId: string, runId: string) => {
