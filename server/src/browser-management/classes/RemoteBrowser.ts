@@ -278,7 +278,7 @@ export class RemoteBrowser {
             }
         } catch (e) {
             const { message } = e as Error;
-            logger.log('error', message);
+            logger.log('error', `Screenshot error: ${message}`);
         }
     };
 
