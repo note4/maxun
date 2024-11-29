@@ -621,7 +621,7 @@ async function executeRun(id: string) {
         };
 
     } catch (error: any) {
-        logger.log('info', `Error while running a recording with id: ${id} - ${error.message}`);
+        logger.log('info', `Error while running a robot with id: ${id} - ${error.message}`);
         const run = await Run.findOne({ where: { runId: id } });
         if (run) {
             await run.update({
