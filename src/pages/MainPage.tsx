@@ -67,9 +67,9 @@ export const MainPage = ({ handleEditRecording }: MainPageProps) => {
     interpretStoredRecording(runId).then(async (interpretation: boolean) => {
       if (!aborted) {
         if (interpretation) {
-          notify('success', `Interpretation of ${runningRecordingName} succeeded`);
+          notify('success', `Interpretation of robot ${runningRecordingName} succeeded`);
         } else {
-          notify('success', `Failed to interpret ${runningRecordingName} recording`);
+          notify('success', `Failed to interpret ${runningRecordingName} robot`);
           // destroy the created browser
           await stopRecording(browserId);
         }
