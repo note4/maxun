@@ -113,9 +113,9 @@ export const MainPage = ({ handleEditRecording }: MainPageProps) => {
     scheduleStoredRecording(runningRecordingId, settings)
       .then(({ message, runId }: ScheduleRunResponse) => {
         if (message === 'success') {
-          notify('success', `Recording ${runningRecordingName} scheduled successfully`);
+          notify('success', `Robot ${runningRecordingName} scheduled successfully`);
         } else {
-          notify('error', `Failed to schedule recording ${runningRecordingName}`);
+          notify('error', `Failed to schedule robot ${runningRecordingName}`);
         }
       });
   }
