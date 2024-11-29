@@ -243,8 +243,8 @@ export class RemoteBrowser {
                         return;
                     }
                     await this.client.send('Page.screencastFrameAck', { sessionId: sessionId });
-                } catch (e) {
-                    logger.log('error', e);
+                } catch (e: any) {
+                    logger.log('error', `Screencast error: ${e}`);
                 }
             }, 100);
         });
@@ -278,7 +278,7 @@ export class RemoteBrowser {
             }
         } catch (e) {
             const { message } = e as Error;
-            logger.log('error', message);
+            logger.log('error', `Screenshot error: ${message}`);
         }
     };
 
