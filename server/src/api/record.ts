@@ -670,7 +670,7 @@ export async function handleRunRecording(id: string, userId: string) {
         return newRunId;
 
     } catch (error: any) {
-        logger.error('Error running recording:', error);
+        logger.error('Error running robot:', error);
     }
 }
 
