@@ -38,7 +38,7 @@ router.get('/recordings', requireSignIn, async (req, res) => {
     const data = await Robot.findAll();
     return res.send(data);
   } catch (e) {
-    logger.log('info', 'Error while reading recordings');
+    logger.log('info', 'Error while reading robots');
     return res.send(null);
   }
 });
@@ -55,7 +55,7 @@ router.get('/recordings/:id', requireSignIn, async (req, res) => {
     );
     return res.send(data);
   } catch (e) {
-    logger.log('info', 'Error while reading recordings');
+    logger.log('info', 'Error while reading robots');
     return res.send(null);
   }
 })
