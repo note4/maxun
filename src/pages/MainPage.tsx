@@ -49,10 +49,10 @@ export const MainPage = ({ handleEditRecording }: MainPageProps) => {
     aborted = true;
     notifyAboutAbort(runId).then(async (response) => {
       if (response) {
-        notify('success', `Interpretation of ${runningRecordingName} aborted successfully`);
+        notify('success', `Interpretation of robot ${runningRecordingName} aborted successfully`);
         await stopRecording(ids.browserId);
       } else {
-        notify('error', `Failed to abort the interpretation ${runningRecordingName} recording`);
+        notify('error', `Failed to abort the interpretation of ${runningRecordingName} robot`);
       }
     })
   }
