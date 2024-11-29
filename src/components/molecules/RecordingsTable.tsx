@@ -253,7 +253,7 @@ export const RecordingsTable = ({ handleEditRecording, handleRunRecording, handl
 
                                     checkRunsForRecording(row.id).then((result: boolean) => {
                                       if (result) {
-                                        notify('warning', 'Cannot delete robot as it has active runs');
+                                        notify('warning', 'Cannot delete robot as it has associated runs');
                                       }
                                     })
 
