@@ -260,7 +260,7 @@ export const RecordingsTable = ({ handleEditRecording, handleRunRecording, handl
                                     deleteRecordingFromStorage(row.id).then((result: boolean) => {
                                       if (result) {
                                         setRows([]);
-                                        notify('success', 'Recording deleted successfully');
+                                        notify('success', 'Robot deleted successfully');
                                         fetchRecordings();
                                       }
                                     })
