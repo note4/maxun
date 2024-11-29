@@ -107,7 +107,7 @@ export const InterpretationButtons = ({ enableStepping }: InterpretationButtonsP
       if (finished) {
         notify('info', 'Run finished');
       } else {
-        notify('error', 'Interpretation failed to start');
+        notify('error', 'Run failed to start');
       }
     }
   };
