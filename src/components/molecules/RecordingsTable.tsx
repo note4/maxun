@@ -417,17 +417,17 @@ const OptionsButton = ({ handleEdit, handleDelete, handleDuplicate }: OptionsBut
           </ListItemIcon>
           <ListItemText>Edit</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => { handleDelete(); handleClose(); }}>
-          <ListItemIcon>
-            <DeleteForever fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Delete</ListItemText>
-        </MenuItem>
         <MenuItem onClick={() => { handleDuplicate(); handleClose(); }}>
           <ListItemIcon>
             <ContentCopy fontSize="small" />
           </ListItemIcon>
           <ListItemText>Duplicate</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={() => { handleDelete(); handleClose(); }}>
+          <ListItemIcon>
+            <DeleteForever fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Delete</ListItemText>
         </MenuItem>
       </Menu>
     </>
