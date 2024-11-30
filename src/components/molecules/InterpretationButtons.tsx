@@ -105,9 +105,9 @@ export const InterpretationButtons = ({ enableStepping }: InterpretationButtonsP
       const finished = await interpretCurrentRecording();
       setInfo({ ...info, running: false });
       if (finished) {
-        notify('info', 'Interpretation finished');
+        notify('info', 'Run finished');
       } else {
-        notify('error', 'Interpretation failed to start');
+        notify('error', 'Run failed to start');
       }
     }
   };
