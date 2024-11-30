@@ -151,9 +151,6 @@ export const RecordingsTable = ({ handleEditRecording, handleRunRecording, handl
     row.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
-
-
   return (
     <React.Fragment>
       <Box display="flex" justifyContent="space-between" alignItems="center">
