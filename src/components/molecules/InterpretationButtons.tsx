@@ -139,13 +139,10 @@ export const InterpretationButtons = ({ enableStepping }: InterpretationButtonsP
         disabled={info.running}
         sx={{ display: 'grid' }}
       >
-        {info.running ? 'Extracting data...please wait for 10secs to 1min' : 'Get Preview of Output Data'}
+        {info.running ? <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <CircularProgress size={24} sx={{ marginLeft: '10px' }} /> Extracting data...please wait for 10secs to 1min
+        </Box> : 'Get Preview of Output Data'}
       </Button>
-      {info.running && (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <CircularProgress size={24} sx={{ marginLeft: '10px' }} />
-        </Box>
-      )}
       <GenericModal
         onClose={() => { }}
         isOpen={decisionModal.open}
