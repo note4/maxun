@@ -246,6 +246,9 @@ export const RecordingsTable = ({ handleEditRecording, handleRunRecording, handl
                               <TableCell key={column.id} align={column.align}>
                                 <OptionsButton
                                   handleEdit={() => handleEditRobot(row.id, row.name, row.params || [])}
+                                  handleDuplicate={() => {
+                                    handleDuplicateRobot(row.id, row.name, row.params || []);
+                                  }}
                                   handleDelete={() => {
 
                                     checkRunsForRecording(row.id).then((result: boolean) => {
@@ -261,9 +264,6 @@ export const RecordingsTable = ({ handleEditRecording, handleRunRecording, handl
                                         fetchRecordings();
                                       }
                                     })
-                                  }}
-                                  handleDuplicate={() => {
-                                    handleDuplicateRobot(row.id, row.name, row.params || []);
                                   }}
                                 />
                               </TableCell>
