@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography, CircularProgress } from "@mui/material";
 import { PlayCircle } from "@mui/icons-material";
 import React, { useCallback, useEffect, useState } from "react";
 import { interpretCurrentRecording, stopCurrentInterpretation } from "../../api/recording";
