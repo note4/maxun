@@ -151,9 +151,6 @@ export const RecordingsTable = ({ handleEditRecording, handleRunRecording, handl
     row.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
-
-
   return (
     <React.Fragment>
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -249,6 +246,9 @@ export const RecordingsTable = ({ handleEditRecording, handleRunRecording, handl
                               <TableCell key={column.id} align={column.align}>
                                 <OptionsButton
                                   handleEdit={() => handleEditRobot(row.id, row.name, row.params || [])}
+                                  handleDuplicate={() => {
+                                    handleDuplicateRobot(row.id, row.name, row.params || []);
+                                  }}
                                   handleDelete={() => {
 
                                     checkRunsForRecording(row.id).then((result: boolean) => {
@@ -264,9 +264,6 @@ export const RecordingsTable = ({ handleEditRecording, handleRunRecording, handl
                                         fetchRecordings();
                                       }
                                     })
-                                  }}
-                                  handleDuplicate={() => {
-                                    handleDuplicateRobot(row.id, row.name, row.params || []);
                                   }}
                                 />
                               </TableCell>
@@ -420,17 +417,17 @@ const OptionsButton = ({ handleEdit, handleDelete, handleDuplicate }: OptionsBut
           </ListItemIcon>
           <ListItemText>Edit</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => { handleDelete(); handleClose(); }}>
-          <ListItemIcon>
-            <DeleteForever fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Delete</ListItemText>
-        </MenuItem>
         <MenuItem onClick={() => { handleDuplicate(); handleClose(); }}>
           <ListItemIcon>
             <ContentCopy fontSize="small" />
           </ListItemIcon>
           <ListItemText>Duplicate</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={() => { handleDelete(); handleClose(); }}>
+          <ListItemIcon>
+            <DeleteForever fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Delete</ListItemText>
         </MenuItem>
       </Menu>
     </>
