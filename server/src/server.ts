@@ -19,12 +19,18 @@ import { capture } from "./utils/analytics";
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swagger/config';
 const isProduction = process.env.NODE_ENV === 'production';
-const allowedOrigin = isProduction ? process.env.ALLOWED_ORIGIN : '*';
+const allowedOrigin = isProduction ? process.env.ALLOWED_PUBLIC_URL : '*';
 
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
+  origin: (origin, callback) => {
+    if (!isProduction || origin === allowedOrigin || allowedOrigin === '*') {
+      callback(null, true); // Allow all in development or match production origin
+    } else {
+      callback(new Error('Not allowed by CORS')); // Block unexpected origins in production
+    }
+  },
+  credentials: true, // Include credentials if needed
 }));
 app.use(express.json());
 
