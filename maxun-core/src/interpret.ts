@@ -329,15 +329,23 @@ export default class Interpreter extends EventEmitter {
       scrapeSchema: async (schema: Record<string, { selector: string; tag: string, attribute: string; }>) => {
         await this.ensureScriptsLoaded(page);
       
-        // Scrape data using the schema
         const scrapeResult = await page.evaluate((schemaObj) => window.scrapeSchema(schemaObj), schema);
       
-        // Log result and accumulate it
-        console.log("Scrape result:", scrapeResult);
-        this.cumulativeResults.push(...(Array.isArray(scrapeResult) ? scrapeResult : [scrapeResult]));
+        const newResults = Array.isArray(scrapeResult) ? scrapeResult : [scrapeResult];
+        newResults.forEach((result) => {
+          Object.entries(result).forEach(([key, value]) => {
+              const keyExists = this.cumulativeResults.some(
+                  (item) => key in item && item[key] !== undefined
+              );
+  
+              if (!keyExists) {
+                  this.cumulativeResults.push({ [key]: value });
+              }
+          });
+        });
 
         const mergedResult: Record<string, string>[] = [
-          Object.fromEntries(
+          Object.fromEntries( 
             Object.entries(
               this.cumulativeResults.reduce((acc, curr) => {
                 Object.entries(curr).forEach(([key, value]) => {
