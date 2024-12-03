@@ -18,6 +18,7 @@ import { fork } from 'child_process';
 import { capture } from "./utils/analytics";
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swagger/config';
+const isProduction = process.env.NODE_ENV === 'production';
 
 const app = express();
 app.use(cors({
@@ -62,7 +63,6 @@ readdirSync(path.join(__dirname, 'api')).forEach((r) => {
   }
 });
 
-const isProduction = process.env.NODE_ENV === 'production';
 const workerPath = path.resolve(__dirname, isProduction ? './worker.js' : './worker.ts');
 
 let workerProcess: any;
