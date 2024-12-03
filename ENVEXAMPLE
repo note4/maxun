@@ -17,7 +17,9 @@ REDIS_PORT=6379                         # Redis port (default: 6379)
 # Backend and Frontend URLs
 BACKEND_URL=http://localhost:8080       # URL on which the backend runs. You can change it based on your needs. 
 VITE_BACKEND_URL=http://localhost:8080  # URL used by frontend to connect to backend. It should always have the same value as BACKEND_URL
-PUBLIC_URL=http://localhost:5173        # URL used by backend to connect to frontend. You can change it based on your needs.
+
+PUBLIC_URL=http://localhost:5173        # URL on which the frontend runs. You can change it based on your needs. 
+VITE_PUBLIC_URL=http://localhost:5173   # URL used by backend to connect to frontend. It should always have the same value as PUBLIC_URL
 
 # Optional Google OAuth settings for Google Sheet Integration
 GOOGLE_CLIENT_ID=your_google_client_id
