@@ -18,19 +18,11 @@ import { fork } from 'child_process';
 import { capture } from "./utils/analytics";
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swagger/config';
-const isProduction = process.env.NODE_ENV === 'production';
-const allowedOrigin = isProduction ? process.env.ALLOWED_PUBLIC_URL : '*';
 
 const app = express();
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!isProduction || origin === allowedOrigin || allowedOrigin === '*') {
-      callback(null, true); // Allow all in development or match production origin
-    } else {
-      callback(new Error('Not allowed by CORS')); // Block unexpected origins in production
-    }
-  },
-  credentials: true, // Include credentials if needed
+  origin: process.env.PUBLIC_URL ? process.env.PUBLIC_URL : 'http://localhost:5173',
+  credentials: true,
 }));
 app.use(express.json());
 
@@ -70,6 +62,7 @@ readdirSync(path.join(__dirname, 'api')).forEach((r) => {
   }
 });
 
+const isProduction = process.env.NODE_ENV === 'production';
 const workerPath = path.resolve(__dirname, isProduction ? './worker.js' : './worker.ts');
 
 let workerProcess: any;
@@ -99,6 +92,7 @@ app.get('/', function (req, res) {
 
 // Add CORS headers
 app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') {
