@@ -78,6 +78,8 @@ You can access the frontend at http://localhost:5173/ and backend at http://loca
 |-----------------------|-----------|----------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `BACKEND_URL`            | Yes       | URL to run backend on.                                                                    | Default value: http://localhost:8080 |
 | `VITE_BACKEND_URL`            | Yes       | URL used by frontend to connect to backend                                           | Default value: http://localhost:8080 |
+| `PUBLIC_URL`            | Yes       | URL to run frontend on.                                                                    | Default value: http://localhost:5173 |
+| `VITE_PUBLIC_URL`            | Yes       | URL used by backend to connect to frontend                                           | Default value: http://localhost:5173 |
 | `JWT_SECRET`          | Yes       | Secret key used to sign and verify JSON Web Tokens (JWTs) for authentication.                | JWT authentication will not work.                            |
 | `DB_NAME`             | Yes       | Name of the Postgres database to connect to.                                                 | Database connection will fail.                               |
 | `DB_USER`             | Yes       | Username for Postgres database authentication.                                               | Database connection will fail.                               |
