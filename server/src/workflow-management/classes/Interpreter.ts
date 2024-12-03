@@ -277,10 +277,14 @@ export class WorkflowInterpreter {
 
     const status = await interpreter.run(page, params);
 
+    const lastArray = this.serializableData.length > 1
+    ? [this.serializableData[this.serializableData.length - 1]]
+    : this.serializableData;
+
     const result = {
       log: this.debugMessages,
       result: status,
-      serializableOutput: this.serializableData.reduce((reducedObject, item, index) => {
+      serializableOutput: lastArray.reduce((reducedObject, item, index) => {
         return {
           [`item-${index}`]: item,
           ...reducedObject,
