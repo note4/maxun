@@ -19,6 +19,7 @@ import { capture } from "./utils/analytics";
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swagger/config';
 const isProduction = process.env.NODE_ENV === 'production';
+const allowedOrigin = isProduction ? process.env.ALLOWED_ORIGIN : '*';
 
 const app = express();
 app.use(cors({
