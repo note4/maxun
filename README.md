@@ -76,6 +76,8 @@ You can access the frontend at http://localhost:5173/ and backend at http://loca
 
 | Variable              | Mandatory | Description                                                                                  | If Not Set                                                   |
 |-----------------------|-----------|----------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `BACKEND_PORT`            | Yes       | Port to run backend on. Needed for Docker setup                                          | Default value: 8080 |
+| `FRONTEND_PORT`            | Yes       | Port to run frontend on. Needed for Docker setup                                        | Default value: 5173 |
 | `BACKEND_URL`            | Yes       | URL to run backend on.                                                                    | Default value: http://localhost:8080 |
 | `VITE_BACKEND_URL`            | Yes       | URL used by frontend to connect to backend                                           | Default value: http://localhost:8080 |
 | `PUBLIC_URL`            | Yes       | URL to run frontend on.                                                                    | Default value: http://localhost:5173 |
