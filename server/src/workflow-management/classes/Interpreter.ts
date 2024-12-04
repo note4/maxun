@@ -14,7 +14,7 @@ function decryptWorkflow(workflow: WorkflowFile): WorkflowFile {
 
   decryptedWorkflow.workflow.forEach((pair) => {
     pair.what.forEach((action) => {
-      if (action.action === 'type' && Array.isArray(action.args) && action.args.length > 1) {
+      if ((action.action === 'type' || action.action === 'press') && Array.isArray(action.args) && action.args.length > 1) {
         try {
           const encryptedValue = action.args[1];
           if (typeof encryptedValue === 'string') {
