@@ -31,7 +31,7 @@ Maxun lets you train a robot in 2 minutes and scrape the web on auto-pilot. Web 
 
 > Note: Maxun is in its early stages of development and currently does not support self-hosting. However, you can run Maxun locally. Self-hosting capabilities are planned for a future release and will be available soon.
 
-# Local Setup
+# Local Installation
 ### Docker Compose
 ```
 git clone https://github.com/getmaxun/maxun
