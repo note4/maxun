@@ -34,7 +34,7 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
     command: server /data --console-address :9001
     ports:
-      - "9000:9000"  # API port
+      - "${MINIO_PORT}:${MINIO_PORT}"  # API port
       - "9001:9001"  # WebUI port
     volumes:
       - minio_data:/data
