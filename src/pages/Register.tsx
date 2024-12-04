@@ -44,7 +44,7 @@ const Register = () => {
       window.localStorage.setItem("user", JSON.stringify(data));
       navigate("/");
     } catch (error:any) {
-      notify("error", error.response.data || "Registration Failed. Please try again.");
+      notify("error",  `Registration Failed. Please try again. ${error.response.data}`);
       setLoading(false);
     }
   };
