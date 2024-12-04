@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "${DB_PORT:-5432}:${DB_PORT:-5432}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -23,7 +23,7 @@ services:
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
     ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
+      - "${REDIS_PORT:-6379}:${REDIS_PORT:-6379}"
     volumes:
       - redis_data:/data
 
@@ -34,8 +34,8 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
     command: server /data --console-address :${MINIO_CONSOLE_PORT}
     ports:
-      - "${MINIO_PORT}:${MINIO_PORT}"  # API port
-      - "${MINIO_CONSOLE_PORT}:${MINIO_CONSOLE_PORT}"  # WebUI port
+      - "${MINIO_PORT:-9000}:${MINIO_PORT:-9000}"  # API port
+      - "${MINIO_CONSOLE_PORT:-9001}:${MINIO_CONSOLE_PORT:-9001}"  # WebUI port
     volumes:
       - minio_data:/data
 
@@ -45,7 +45,7 @@ services:
       #dockerfile: server/Dockerfile
     image: getmaxun/maxun-backend:v0.0.2
     ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - "${BACKEND_PORT:-8080}:${BACKEND_PORT:-8080}"
     env_file: .env
     environment:
       BACKEND_URL: ${BACKEND_URL}
@@ -74,7 +74,7 @@ services:
       #dockerfile: Dockerfile
     image: getmaxun/maxun-frontend:v0.0.1
     ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+      - "${FRONTEND_PORT:-5173}:${FRONTEND_PORT:-5173}"
     env_file: .env
     environment:
       PUBLIC_URL: ${PUBLIC_URL}
