@@ -32,10 +32,10 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
       MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
-    command: server /data --console-address :9001
+    command: server /data --console-address :${MINIO_CONSOLE_PORT}
     ports:
       - "${MINIO_PORT}:${MINIO_PORT}"  # API port
-      - "9001:9001"  # WebUI port
+      - "${MINIO_CONSOLE_PORT}:${MINIO_CONSOLE_PORT}"  # WebUI port
     volumes:
       - minio_data:/data
 
