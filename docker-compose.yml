@@ -57,9 +57,8 @@ services:
       CHROMIUM_FLAGS: '--disable-gpu --no-sandbox --headless=new'
     security_opt:
     - seccomp=unconfined  # This might help with browser sandbox issues
-    # Increase shared memory size for Chromium
-    shm_size: '2gb'
-    mem_limit: 2g  # Set a 2GB memory limit
+    shm_size: '2gb' # Increase shared memory size for Chromium
+    mem_limit: 2g   # Set a 2GB memory limit
     depends_on:
       - postgres
       - redis
@@ -82,7 +81,7 @@ services:
       BACKEND_URL: ${BACKEND_URL}
     volumes:
       - ./:/app             # Mount entire frontend app directory for hot reloading
-      - /app/node_modules    # Anonymous volume to prevent overwriting node_modules
+      - /app/node_modules   # Anonymous volume to prevent overwriting node_modules
     depends_on:
       - backend
 
