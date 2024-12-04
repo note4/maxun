@@ -319,7 +319,7 @@ export class WorkflowGenerator {
       where,
       what: [{
         action: 'press',
-        args: [selector, key],
+        args: [selector, encrypt(key)],
       }],
     }
     if (selector) {
