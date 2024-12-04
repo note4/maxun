@@ -45,9 +45,10 @@ services:
       #dockerfile: server/Dockerfile
     image: getmaxun/maxun-backend:v0.0.2
     ports:
-      - "8080:8080"
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
     env_file: .env
     environment:
+      BACKEND_URL: ${BACKEND_URL}
       # to ensure Playwright works in Docker
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 0
@@ -74,8 +75,11 @@ services:
       #dockerfile: Dockerfile
     image: getmaxun/maxun-frontend:v0.0.1
     ports:
-      - "5173:5173"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     env_file: .env
+    environment:
+      PUBLIC_URL: ${PUBLIC_URL}
+      BACKEND_URL: ${BACKEND_URL}
     volumes:
       - ./:/app             # Mount entire frontend app directory for hot reloading
       - /app/node_modules    # Anonymous volume to prevent overwriting node_modules
