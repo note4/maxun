@@ -289,7 +289,7 @@ function scrapableHeuristics(maxCountPerPage = 50, minArea = 20000, scrolls = 3,
             } else if (attribute === 'href') {
               // Handle relative 'href' URLs
               const href = fieldElement.getAttribute('href');
-              record[label] = href ? new URL(href, baseUrl).href : null;
+              record[label] = href ? new URL(href, window.location.origin).href : null;
             } else {
               record[label] = fieldElement.getAttribute(attribute);
             }
