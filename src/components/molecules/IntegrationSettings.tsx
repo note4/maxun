@@ -77,8 +77,7 @@ export const IntegrationSettingsModal = ({
       );
       notify(
         "error",
-        `Error fetching spreadsheet files: ${
-          error.response?.data?.message || error.message
+        `Error fetching spreadsheet files: ${error.response?.data?.message || error.message
         }`
       );
     }
