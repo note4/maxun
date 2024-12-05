@@ -121,6 +121,26 @@ export default class Interpreter extends EventEmitter {
     }
   }
 
+  private getPreviousSelectors(workflow: Workflow, actionId: number): string[] {
+    const selectors: string[] = [];
+    let index = actionId - 1;
+
+    while (index >= 0) {
+        const previousSelectors = workflow[index]?.where?.selectors;
+        if (previousSelectors && previousSelectors.length > 0) {
+            previousSelectors.forEach((selector) => {
+                if (!selectors.includes(selector)) {
+                    selectors.push(selector); // Avoid duplicates
+                }
+            });
+            break; // Exit the loop once valid selectors are found
+        }
+        index--; // Move further back in the workflow
+    }
+
+    return selectors;
+  }
+
   /**
     * Returns the context object from given Page and the current workflow.\
     * \
@@ -130,11 +150,11 @@ export default class Interpreter extends EventEmitter {
     * @param workflow Current **initialized** workflow (array of where-what pairs).
     * @returns {PageState} State of the current page.
     */
-  private async getState(page: Page, workflow: Workflow): Promise<PageState> {
+  private async getState(page: Page, workflow: Workflow, selectors: string[]): Promise<PageState> {
     /**
      * All the selectors present in the current Workflow
      */
-    const selectors = Preprocessor.extractSelectors(workflow);
+    // const selectors = Preprocessor.extractSelectors(workflow);
 
     /**
       * Determines whether the element targetted by the selector is [actionable](https://playwright.dev/docs/actionability).
@@ -365,6 +385,7 @@ export default class Interpreter extends EventEmitter {
         console.log("MERGED results:", mergedResult);
 
         await this.options.serializableCallback(mergedResult);
+        // await this.options.serializableCallback(scrapeResult);
       },
 
       scrapeList: async (config: { listSelector: string, fields: any, limit?: number, pagination: any }) => {
@@ -550,6 +571,7 @@ export default class Interpreter extends EventEmitter {
     // apply ad-blocker to the current page
     await this.applyAdBlocker(p);
     const usedActions: string[] = [];
+    const selectors: string[] = [];
     let lastAction = null;
     let repeatCount = 0;
 
@@ -579,7 +601,7 @@ export default class Interpreter extends EventEmitter {
 
       let pageState = {};
       try {
-        pageState = await this.getState(p, workflow);
+        pageState = await this.getState(p, workflow, selectors);
       } catch (e: any) {
         this.log('The browser has been closed.');
         return;
@@ -615,6 +637,9 @@ export default class Interpreter extends EventEmitter {
         try {
           await this.carryOutSteps(p, action.what);
           usedActions.push(action.id ?? 'undefined');
+          
+          selectors.push(...this.getPreviousSelectors(workflow, actionId));
+          console.log("SELECTORS", selectors);
         } catch (e) {
           this.log(<Error>e, Level.ERROR);
         }
