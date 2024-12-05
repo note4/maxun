@@ -15,11 +15,13 @@ import { useGlobalInfoStore } from "../../context/globalInfo";
 import { getStoredRecording } from "../../api/storage";
 import { apiUrl } from "../../apiConfig.js";
 import Cookies from 'js-cookie';
+
 interface IntegrationProps {
   isOpen: boolean;
   handleStart: (data: IntegrationSettings) => void;
   handleClose: () => void;
 }
+
 export interface IntegrationSettings {
   spreadsheetId: string;
   spreadsheetName: string;
