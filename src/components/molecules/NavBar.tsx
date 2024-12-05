@@ -58,13 +58,13 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
         justifyContent: 'flex-start',
       }}>
         <img src={MaxunLogo} width={45} height={40} style={{ borderRadius: '5px', margin: '5px 0px 5px 15px' }} />
-        <div style={{ padding: '11px' }}><ProjectName>Maxun</ProjectName>
+        <div style={{ padding: '11px' }}><ProjectName>Maxun</ProjectName></div>
         <Chip
           label={`v${packageJson.version}`}
           color="primary"
           variant="outlined"
+          sx={{ marginTop: '10px' }}
         />
-      </div>
       </div>
       {
         user ? (
