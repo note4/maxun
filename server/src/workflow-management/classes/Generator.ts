@@ -160,41 +160,6 @@ export class WorkflowGenerator {
     })
   };
 
-  /**
-   * New function to handle actionable check for scrapeList
-   * @param page The current Playwright Page object.
-   * @param config The scrapeList configuration object.
-   * @returns {Promise<string[]>} Array of actionable selectors.
-   */
-  private async getSelectorsForScrapeList(page: Page, config: {
-    listSelector: string;
-    fields: any;
-    limit?: number;
-    pagination: any;
-  }): Promise<string[]> {
-    const { listSelector } = config;
-
-    // Verify if the selectors are present and actionable on the current page
-    const actionableSelectors: string[] = [];
-    if (listSelector) {
-      const isActionable = await page.isVisible(listSelector).catch(() => false);
-      if (isActionable) {
-        actionableSelectors.push(listSelector);
-        logger.log('debug', `List selector ${listSelector} is actionable.`);
-      } else {
-        logger.log('warn', `List selector ${listSelector} is not visible on the page.`);
-      }
-    }
-
-    return actionableSelectors;
-  }
-
-  /**
-   * New function to handle actionable check for scrapeList
-   * @param page The current Playwright Page object.
-   * @param schema The scrapeSchema configuration object.
-   * @returns {Promise<string[]>} Array of actionable selectors.
-   */
   private async getSelectorsForSchema(page: Page, schema: Record<string, { selector: string }>): Promise<string[]> {
     const selectors = Object.values(schema).map((field) => field.selector);
     
@@ -241,14 +206,6 @@ export class WorkflowGenerator {
       if (schema) {
         const additionalSelectors = await this.getSelectorsForSchema(page, schema);
         pair.where.selectors = [...(pair.where.selectors || []), ...additionalSelectors];
-      }
-    }
-
-    if (pair.what[0].action === 'scrapeList') {
-      const config = pair.what[0]?.args?.[0];
-      if (config) {
-        const actionableSelectors = await this.getSelectorsForScrapeList(page, config);
-        pair.where.selectors = [...(pair.where.selectors || []), ...actionableSelectors];
       }
     }
   
