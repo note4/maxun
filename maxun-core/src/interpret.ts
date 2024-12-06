@@ -121,26 +121,54 @@ export default class Interpreter extends EventEmitter {
     }
   }
 
-  private getPreviousSelectors(workflow: Workflow, actionId: number): string[] {
-    const selectors: string[] = [];
-    let index = actionId - 1;
+  // private getPreviousSelectors(workflow: Workflow, actionId: number): string[] {
+  //   const selectors: string[] = [];
+  //   let index = actionId - 1;
 
-    while (index >= 0) {
-        const previousSelectors = workflow[index]?.where?.selectors;
-        console.log("Previous Selectors:", previousSelectors);
-        if (previousSelectors && previousSelectors.length > 0) {
-            previousSelectors.forEach((selector) => {
+  //   while (index >= 0) {
+  //       const previousSelectors = workflow[index]?.where?.selectors;
+  //       console.log("Previous Selectors:", previousSelectors);
+  //       if (previousSelectors && previousSelectors.length > 0) {
+  //           previousSelectors.forEach((selector) => {
+  //               if (!selectors.includes(selector)) {
+  //                   selectors.push(selector); // Avoid duplicates
+  //               }
+  //           });
+  //           break; // Exit the loop once valid selectors are found
+  //       }
+  //       index--; // Move further back in the workflow
+  //   }
+
+  //   return selectors;
+  // }
+
+  private getSelectors(workflow: Workflow, actionId: number): string[] {
+    const selectors: string[] = [];
+
+    // Validate actionId
+    if (actionId <= 0) {
+        console.log("No previous selectors to collect.");
+        return selectors; // Empty array as there are no previous steps
+    }
+
+    // Iterate from the start up to (but not including) actionId
+    for (let index = 0; index < actionId; index++) {
+        const currentSelectors = workflow[index]?.where?.selectors;
+        console.log(`Selectors at step ${index}:`, currentSelectors);
+
+        if (currentSelectors && currentSelectors.length > 0) {
+            currentSelectors.forEach((selector) => {
                 if (!selectors.includes(selector)) {
                     selectors.push(selector); // Avoid duplicates
                 }
             });
-            break; // Exit the loop once valid selectors are found
         }
-        index--; // Move further back in the workflow
     }
 
+    console.log("Collected Selectors:", selectors);
     return selectors;
   }
+
 
   /**
     * Returns the context object from given Page and the current workflow.\
@@ -167,8 +195,8 @@ export default class Interpreter extends EventEmitter {
     const actionable = async (selector: string): Promise<boolean> => {
       try {
         const proms = [
-          page.isEnabled(selector, { timeout: 2000 }),
-          page.isVisible(selector, { timeout: 2000 }),
+          page.isEnabled(selector, { timeout: 500 }),
+          page.isVisible(selector, { timeout: 500 }),
         ];
 
         return await Promise.all(proms).then((bools) => bools.every((x) => x));
@@ -198,7 +226,7 @@ export default class Interpreter extends EventEmitter {
             ...p,
             [cookie.name]: cookie.value,
           }), {}),
-      selectors: presentSelectors,
+      selectors: selectors,
     };
   }
 
@@ -570,11 +598,29 @@ export default class Interpreter extends EventEmitter {
     return allResults;
   }
 
+  private getMatchingActionId(workflow: Workflow, pageState: PageState, usedActions: string[]) {
+    for (let actionId = workflow.length - 1; actionId >= 0; actionId--) {
+      const step = workflow[actionId];
+      const isApplicable = this.applicable(step.where, pageState, usedActions);
+      console.log("-------------------------------------------------------------");
+      console.log(`Where:`, step.where);
+      console.log(`Page state:`, pageState);
+      console.log(`Match result: ${isApplicable}`);
+      console.log("-------------------------------------------------------------");
+      
+      if (isApplicable) {
+          return actionId;
+      }
+  }
+  }
+
   private async runLoop(p: Page, workflow: Workflow) {
+    const workflowCopy: Workflow = JSON.parse(JSON.stringify(workflow));
+
     // apply ad-blocker to the current page
     await this.applyAdBlocker(p);
     const usedActions: string[] = [];
-    const selectors: string[] = [];
+    let selectors: string[] = [];
     let lastAction = null;
     let repeatCount = 0;
 
@@ -584,7 +630,7 @@ export default class Interpreter extends EventEmitter {
     * e.g. via `enqueueLinks`.
     */
     p.on('popup', (popup) => {
-      this.concurrency.addJob(() => this.runLoop(popup, workflow));
+      this.concurrency.addJob(() => this.runLoop(popup, workflowCopy));
     });
 
     /* eslint no-constant-condition: ["warn", { "checkLoops": false }] */
@@ -604,7 +650,8 @@ export default class Interpreter extends EventEmitter {
 
       let pageState = {};
       try {
-        pageState = await this.getState(p, workflow, selectors);
+        pageState = await this.getState(p, workflowCopy, selectors);
+        selectors = [];
       } catch (e: any) {
         this.log('The browser has been closed.');
         return;
@@ -614,16 +661,22 @@ export default class Interpreter extends EventEmitter {
         this.log(`Current state is: \n${JSON.stringify(pageState, null, 2)}`, Level.WARN);
       }
 
-      const actionId = workflow.findIndex((step) => {
-        const isApplicable = this.applicable(step.where, pageState, usedActions);
-        console.log(`Where:`, step.where);
-        console.log(`Page state:`, pageState);
-        console.log(`Match result: ${isApplicable}`);
-        return isApplicable;
-      });
+      // const actionId = workflow.findIndex((step) => {
+      //   const isApplicable = this.applicable(step.where, pageState, usedActions);
+      //   console.log("-------------------------------------------------------------");
+      //   console.log(`Where:`, step.where);
+      //   console.log(`Page state:`, pageState);
+      //   console.log(`Match result: ${isApplicable}`);
+      //   console.log("-------------------------------------------------------------");
+      //   return isApplicable;
+      // });
 
-      const action = workflow[actionId];
+      const actionId = this.getMatchingActionId(workflowCopy, pageState, usedActions);
 
+      const action = workflowCopy[actionId];
+
+      console.log("MATCHED ACTION:", action);
+      console.log("MATCHED ACTION ID:", actionId);
       this.log(`Matched ${JSON.stringify(action?.where)}`, Level.LOG);
 
       if (action) { // action is matched
@@ -643,8 +696,12 @@ export default class Interpreter extends EventEmitter {
           console.log("Carrying out:", action.what);
           await this.carryOutSteps(p, action.what);
           usedActions.push(action.id ?? 'undefined');
+
+          workflowCopy.splice(actionId, 1);
+          console.log(`Action with ID ${action.id} removed from the workflow copy.`);
           
-          const newSelectors = this.getPreviousSelectors(workflow, actionId);
+          // const newSelectors = this.getPreviousSelectors(workflow, actionId);
+          const newSelectors = this.getSelectors(workflowCopy, actionId);
           newSelectors.forEach(selector => {
               if (!selectors.includes(selector)) {
                   selectors.push(selector);
