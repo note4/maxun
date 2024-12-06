@@ -127,6 +127,7 @@ export default class Interpreter extends EventEmitter {
 
     while (index >= 0) {
         const previousSelectors = workflow[index]?.where?.selectors;
+        console.log("Previous Selectors:", previousSelectors);
         if (previousSelectors && previousSelectors.length > 0) {
             previousSelectors.forEach((selector) => {
                 if (!selectors.includes(selector)) {
@@ -156,6 +157,8 @@ export default class Interpreter extends EventEmitter {
      */
     // const selectors = Preprocessor.extractSelectors(workflow);
 
+    console.log("All selectors:", selectors);
+
     /**
       * Determines whether the element targetted by the selector is [actionable](https://playwright.dev/docs/actionability).
       * @param selector Selector to be queried
@@ -164,8 +167,8 @@ export default class Interpreter extends EventEmitter {
     const actionable = async (selector: string): Promise<boolean> => {
       try {
         const proms = [
-          page.isEnabled(selector, { timeout: 500 }),
-          page.isVisible(selector, { timeout: 500 }),
+          page.isEnabled(selector, { timeout: 2000 }),
+          page.isVisible(selector, { timeout: 2000 }),
         ];
 
         return await Promise.all(proms).then((bools) => bools.every((x) => x));
@@ -627,19 +630,26 @@ export default class Interpreter extends EventEmitter {
         if (this.options.debugChannel?.activeId) {
           this.options.debugChannel.activeId(actionId);
         }
-
+        
         repeatCount = action === lastAction ? repeatCount + 1 : 0;
-        if (this.options.maxRepeats && repeatCount >= this.options.maxRepeats) {
+        
+        console.log("REPEAT COUNT", repeatCount);
+        if (this.options.maxRepeats && repeatCount > this.options.maxRepeats) {
           return;
         }
         lastAction = action;
-
+        
         try {
+          console.log("Carrying out:", action.what);
           await this.carryOutSteps(p, action.what);
           usedActions.push(action.id ?? 'undefined');
           
-          selectors.push(...this.getPreviousSelectors(workflow, actionId));
-          console.log("SELECTORS", selectors);
+          const newSelectors = this.getPreviousSelectors(workflow, actionId);
+          newSelectors.forEach(selector => {
+              if (!selectors.includes(selector)) {
+                  selectors.push(selector);
+              }
+          });
         } catch (e) {
           this.log(<Error>e, Level.ERROR);
         }
