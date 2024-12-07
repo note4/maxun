@@ -142,31 +142,23 @@ export default class Interpreter extends EventEmitter {
   //   return selectors;
   // }
 
-  private getSelectors(workflow: Workflow, actionId: number): string[] {
-    const selectors: string[] = [];
+  private getSelectors(workflow: Workflow): string[] {
+    const selectorsSet = new Set<string>();
 
-    // Validate actionId
-    if (actionId <= 0) {
-        console.log("No previous selectors to collect.");
-        return selectors; // Empty array as there are no previous steps
+    if (workflow.length === 0) {
+        return [];
     }
 
-    // Iterate from the start up to (but not including) actionId
-    for (let index = 0; index < actionId; index++) {
+    for (let index = workflow.length - 1; index >= 0; index--) {
         const currentSelectors = workflow[index]?.where?.selectors;
-        console.log(`Selectors at step ${index}:`, currentSelectors);
 
         if (currentSelectors && currentSelectors.length > 0) {
-            currentSelectors.forEach((selector) => {
-                if (!selectors.includes(selector)) {
-                    selectors.push(selector); // Avoid duplicates
-                }
-            });
+            currentSelectors.forEach((selector) => selectorsSet.add(selector));
+            return Array.from(selectorsSet);
         }
     }
 
-    console.log("Collected Selectors:", selectors);
-    return selectors;
+    return [];
   }
 
 
@@ -216,9 +208,8 @@ export default class Interpreter extends EventEmitter {
     //     return [];
     //   }),
     // ).then((x) => x.flat());
-    const action = workflowCopy[workflowCopy.length - 1];
 
-    console.log("Next action:", action)
+    const action = workflowCopy[workflowCopy.length - 1];
 
     let url: any = page.url();
 
@@ -709,10 +700,10 @@ export default class Interpreter extends EventEmitter {
           usedActions.push(action.id ?? 'undefined');
 
           workflowCopy.splice(actionId, 1);
-          console.log(`Action with ID ${action.id} removed from the workflow copy.`);
+          console.log(`Action with ID ${actionId} removed from the workflow copy.`);
           
           // const newSelectors = this.getPreviousSelectors(workflow, actionId);
-          const newSelectors = this.getSelectors(workflowCopy, actionId);
+          const newSelectors = this.getSelectors(workflowCopy);
           newSelectors.forEach(selector => {
               if (!selectors.includes(selector)) {
                   selectors.push(selector);
