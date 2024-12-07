@@ -222,7 +222,7 @@ export default class Interpreter extends EventEmitter {
 
     let url: any = page.url();
 
-    if (action && action.where.url !== url && action.where.url !== "about:blank") {
+    if (action && action.where.url !== url) {
       url = action.where.url;
     }
 
