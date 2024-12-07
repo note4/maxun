@@ -402,11 +402,11 @@ export class RemoteBrowser {
         await this.currentPage?.close();
         this.currentPage = newPage;
         if (this.currentPage) {
-            // this.currentPage.on('framenavigated', (frame) => {
-            //     if (frame === this.currentPage?.mainFrame()) {
-            //         this.socket.emit('urlChanged', this.currentPage.url());
-            //     }
-            // });
+            this.currentPage.on('framenavigated', (frame) => {
+                if (frame === this.currentPage?.mainFrame()) {
+                    this.socket.emit('urlChanged', this.currentPage.url());
+                }
+            });
             this.currentPage.on('load', (page) => {
                 this.socket.emit('urlChanged', page.url());
             })
