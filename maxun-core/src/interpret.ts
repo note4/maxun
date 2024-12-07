@@ -179,54 +179,62 @@ export default class Interpreter extends EventEmitter {
     * @param workflow Current **initialized** workflow (array of where-what pairs).
     * @returns {PageState} State of the current page.
     */
-  private async getState(page: Page, workflow: Workflow, selectors: string[]): Promise<PageState> {
+  private async getState(page: Page, workflowCopy: Workflow, selectors: string[]): Promise<PageState> {
     /**
      * All the selectors present in the current Workflow
      */
     // const selectors = Preprocessor.extractSelectors(workflow);
-
-    console.log("All selectors:", selectors);
+    // console.log("Current selectors:", selectors);
 
     /**
       * Determines whether the element targetted by the selector is [actionable](https://playwright.dev/docs/actionability).
       * @param selector Selector to be queried
       * @returns True if the targetted element is actionable, false otherwise.
       */
-    const actionable = async (selector: string): Promise<boolean> => {
-      try {
-        const proms = [
-          page.isEnabled(selector, { timeout: 500 }),
-          page.isVisible(selector, { timeout: 500 }),
-        ];
+    // const actionable = async (selector: string): Promise<boolean> => {
+    //   try {
+    //     const proms = [
+    //       page.isEnabled(selector, { timeout: 5000 }),
+    //       page.isVisible(selector, { timeout: 5000 }),
+    //     ];
 
-        return await Promise.all(proms).then((bools) => bools.every((x) => x));
-      } catch (e) {
-        // log(<Error>e, Level.ERROR);
-        return false;
-      }
-    };
+    //     return await Promise.all(proms).then((bools) => bools.every((x) => x));
+    //   } catch (e) {
+    //     // log(<Error>e, Level.ERROR);
+    //     return false;
+    //   }
+    // };
 
     /**
       * Object of selectors present in the current page.
       */
-    const presentSelectors: SelectorArray = await Promise.all(
-      selectors.map(async (selector) => {
-        if (await actionable(selector)) {
-          return [selector];
-        }
-        return [];
-      }),
-    ).then((x) => x.flat());
+    // const presentSelectors: SelectorArray = await Promise.all(
+    //   selectors.map(async (selector) => {
+    //     if (await actionable(selector)) {
+    //       return [selector];
+    //     }
+    //     return [];
+    //   }),
+    // ).then((x) => x.flat());
+    const action = workflowCopy[workflowCopy.length - 1];
+
+    console.log("Next action:", action)
+
+    let url: any = page.url();
+
+    if (action && action.where.url !== url && action.where.url !== "about:blank") {
+      url = action.where.url;
+    }
 
     return {
-      url: page.url(),
+      url,
       cookies: (await page.context().cookies([page.url()]))
         .reduce((p, cookie) => (
           {
             ...p,
             [cookie.name]: cookie.value,
           }), {}),
-      selectors: selectors,
+      selectors,
     };
   }
 
@@ -622,6 +630,7 @@ export default class Interpreter extends EventEmitter {
     const usedActions: string[] = [];
     let selectors: string[] = [];
     let lastAction = null;
+    let actionId = -1
     let repeatCount = 0;
 
     /**
@@ -649,9 +658,11 @@ export default class Interpreter extends EventEmitter {
       }
 
       let pageState = {};
+      let getStateTest = "Hello";
       try {
         pageState = await this.getState(p, workflowCopy, selectors);
         selectors = [];
+        console.log("Empty selectors:", selectors)
       } catch (e: any) {
         this.log('The browser has been closed.');
         return;
@@ -671,7 +682,7 @@ export default class Interpreter extends EventEmitter {
       //   return isApplicable;
       // });
 
-      const actionId = this.getMatchingActionId(workflowCopy, pageState, usedActions);
+      actionId = this.getMatchingActionId(workflowCopy, pageState, usedActions);
 
       const action = workflowCopy[actionId];
 
