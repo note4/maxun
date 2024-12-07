@@ -128,7 +128,6 @@ export const getRect = async (page: Page, coordinates: Coordinates) => {
             };
           }
         }
-        return null;
       },
       { x: coordinates.x, y: coordinates.y },
     );
