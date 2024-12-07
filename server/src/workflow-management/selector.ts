@@ -753,7 +753,6 @@ interface SelectorResult {
 export const getNonUniqueSelectors = async (page: Page, coordinates: Coordinates): Promise<SelectorResult> => {
   try {
     const selectors = await page.evaluate(({ x, y }: { x: number, y: number }) => {
-
       function getNonUniqueSelector(element: HTMLElement): string {
         let selector = element.tagName.toLowerCase();
 
@@ -775,18 +774,25 @@ export const getNonUniqueSelectors = async (page: Page, coordinates: Coordinates
         let depth = 0;
         const maxDepth = 2;
 
-        while (element && element !== document.body && depth < maxDepth) {
-          const selector = getNonUniqueSelector(element);
+        // Ensure we start with a valid element
+        let currentElement = element;
+        while (currentElement && currentElement !== document.body && depth < maxDepth) {
+          const selector = getNonUniqueSelector(currentElement);
           path.unshift(selector);
-          element = element.parentElement;
+          currentElement = currentElement.parentElement;
           depth++;
         }
 
         return path.join(' > ');
       }
 
-      const element = document.elementFromPoint(x, y) as HTMLElement | null;
-      if (!element) return null;
+      // Find the initial element at the point
+      const initialElement = document.elementFromPoint(x, y) as HTMLElement;
+      
+      if (!initialElement) return null;
+
+      // Prefer parent if exists, otherwise use initial element
+      const element = initialElement.parentElement || initialElement;
 
       const generalSelector = getSelectorPath(element);
       return {
