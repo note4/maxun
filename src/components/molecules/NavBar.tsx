@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { stopRecording } from "../../api/recording";
 import { useGlobalInfoStore } from "../../context/globalInfo";
 import { IconButton, Menu, MenuItem, Typography, Avatar, Chip, } from "@mui/material";
-import { AccountCircle, Logout, Clear, YouTube } from "@mui/icons-material";
+import { AccountCircle, Logout, Clear, YouTube, X } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/auth';
 import { SaveRecording } from '../molecules/SaveRecording';
@@ -118,6 +118,11 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                     window.open('https://www.youtube.com/@MaxunOSS/videos', '_blank');
                   }}>
                     <YouTube sx={{ marginRight: '5px' }} /> YouTube
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    window.open('https://x.com/maxun_io', '_blank');
+                  }}>
+                    <X sx={{ marginRight: '5px' }} /> Twiiter (X)
                   </MenuItem>
                 </Menu>
               </>
