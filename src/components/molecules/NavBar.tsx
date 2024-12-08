@@ -103,7 +103,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
             {!isRecording ? (
               <>
                 <Button variant="outlined" onClick={handleUpdateOpen} sx={{
-                  marginRight: '30px',
+                  marginRight: '40px',
                   color: "#00000099",
                   border: "#00000099 1px solid",
                   '&:hover': { color: '#ff00c3', border: '#ff00c3 1px solid' }
