@@ -112,7 +112,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                       top: "50%",
                       left: "50%",
                       transform: "translate(-50%, -50%)",
-                      width: 400,
+                      width: 500,
                       bgcolor: "background.paper",
                       boxShadow: 24,
                       p: 4,
@@ -136,29 +136,27 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                           sx={{ marginTop: 2, marginBottom: 2 }}
                           centered
                         >
-                          <Tab label="Manual Setup" />
-                          <Tab label="Docker Compose Setup" />
+                          <Tab label="Manual Setup Upgrade" />
+                          <Tab label="Docker Compose Setup Upgrade" />
                         </Tabs>
                         {tab === 0 && (
                           <Box>
-                            <Typography variant="h6">Manual Upgrade</Typography>
-                            <Typography component="pre" sx={{ bgcolor: "#f5f5f5", p: 2, borderRadius: 1 }}>
+                            <div style={{ background: 'gray', marginLeft: '30px'}}>
                               git pull origin main
                               <br />
                               npm install
                               <br />
                               npm run start
-                            </Typography>
+                            </div>
                           </Box>
                         )}
                         {tab === 1 && (
                           <Box>
-                            <Typography variant="h6">Docker Compose Upgrade</Typography>
-                            <Typography component="pre" sx={{ bgcolor: "#f5f5f5", p: 2, borderRadius: 1 }}>
+                             <div style={{ background: 'gray', marginLeft: '30px'}}>
                               docker pull getmaxun/maxun:latest
                               <br />
                               docker-compose up -d
-                            </Typography>
+                            </div>
                           </Box>
                         )}
                       </>
