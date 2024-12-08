@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { stopRecording } from "../../api/recording";
 import { useGlobalInfoStore } from "../../context/globalInfo";
 import { IconButton, Menu, MenuItem, Typography, Chip, Button, Modal, Tabs, Tab, Box } from "@mui/material";
-import { AccountCircle, Logout, Clear, YouTube, X } from "@mui/icons-material";
+import { AccountCircle, Logout, Clear, YouTube, X, Update } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/auth';
 import { SaveRecording } from '../molecules/SaveRecording';
@@ -103,7 +103,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
             {!isRecording ? (
               <>
                 <Button variant="outlined" onClick={handleUpdateOpen} sx={{ marginRight: '30px' }}>
-                  Upgrade Maxun
+                  <Update sx={{ marginRight: '5px'}} /> Upgrade Maxun
                 </Button>
                 <Modal open={open} onClose={handleUpdateClose}>
                   <Box
