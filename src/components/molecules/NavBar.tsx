@@ -96,186 +96,186 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
 
   return (
     <>
-    {isUpdateAvailable && (
-  <Snackbar
-    open={true}
-    message={`New version ${latestVersion} available! Click "Upgrade Maxun" to update.`}
-    action={
-      <Button color="secondary" size="small" onClick={handleUpdateOpen}>
-        Upgrade
-      </Button>
-    }
-  />
-)}
-    <NavBarWrapper>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'flex-start',
-      }}>
-        <img src={MaxunLogo} width={45} height={40} style={{ borderRadius: '5px', margin: '5px 0px 5px 15px' }} />
-        <div style={{ padding: '11px' }}><ProjectName>Maxun</ProjectName></div>
-        <Chip
-          label={`${currentVersion}`}
-          color="primary"
-          variant="outlined"
-          sx={{ marginTop: '10px' }}
+      {isUpdateAvailable && (
+        <Snackbar
+          open={true}
+          message={`New version ${latestVersion} available! Click "Upgrade Maxun" to update.`}
+          action={
+            <Button color="secondary" size="small" onClick={handleUpdateOpen}>
+              Upgrade
+            </Button>
+          }
         />
-      </div>
-      {
-        user ? (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-            {!isRecording ? (
-              <>
-                <Button variant="outlined" onClick={handleUpdateOpen} sx={{
-                  marginRight: '40px',
-                  color: "#00000099",
-                  border: "#00000099 1px solid",
-                  '&:hover': { color: '#ff00c3', border: '#ff00c3 1px solid' }
-                }}>
-                  <Update sx={{ marginRight: '5px' }} /> Upgrade Maxun
-                </Button>
-                <Modal open={open} onClose={handleUpdateClose}>
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      width: 500,
-                      bgcolor: "background.paper",
-                      boxShadow: 24,
-                      p: 4,
-                      borderRadius: 2,
-                    }}
-                  >
-                    {latestVersion === null ? (
-                      <Typography>Checking for updates...</Typography>
-                    ) : currentVersion === latestVersion ? (
-                      <Typography variant="h6" textAlign="center">
-                        🎉 You're up to date!
-                      </Typography>
-                    ) : (
-                      <>
-                        <Typography variant="body1" textAlign="left" sx={{ marginLeft: '30px' }}>
-                          A new version is available: {latestVersion}. Upgrade to the latest version for bug fixes, enhancements and new features!
-                          <br />
-                          View all the new updates
-                          <a href="https://github.com/getmaxun/maxun/releases/" target="_blank" style={{ textDecoration: 'none' }}>{' '}here.</a>
+      )}
+      <NavBarWrapper>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'flex-start',
+        }}>
+          <img src={MaxunLogo} width={45} height={40} style={{ borderRadius: '5px', margin: '5px 0px 5px 15px' }} />
+          <div style={{ padding: '11px' }}><ProjectName>Maxun</ProjectName></div>
+          <Chip
+            label={`${currentVersion}`}
+            color="primary"
+            variant="outlined"
+            sx={{ marginTop: '10px' }}
+          />
+        </div>
+        {
+          user ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+              {!isRecording ? (
+                <>
+                  <Button variant="outlined" onClick={handleUpdateOpen} sx={{
+                    marginRight: '40px',
+                    color: "#00000099",
+                    border: "#00000099 1px solid",
+                    '&:hover': { color: '#ff00c3', border: '#ff00c3 1px solid' }
+                  }}>
+                    <Update sx={{ marginRight: '5px' }} /> Upgrade Maxun
+                  </Button>
+                  <Modal open={open} onClose={handleUpdateClose}>
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 500,
+                        bgcolor: "background.paper",
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: 2,
+                      }}
+                    >
+                      {latestVersion === null ? (
+                        <Typography>Checking for updates...</Typography>
+                      ) : currentVersion === latestVersion ? (
+                        <Typography variant="h6" textAlign="center">
+                          🎉 You're up to date!
                         </Typography>
-                        <Tabs
-                          value={tab}
-                          onChange={handleUpdateTabChange}
-                          sx={{ marginTop: 2, marginBottom: 2 }}
-                          centered
-                        >
-                          <Tab label="Manual Setup Upgrade" />
-                          <Tab label="Docker Compose Setup Upgrade" />
-                        </Tabs>
-                        {tab === 0 && (
-                          <Box sx={{ marginLeft: '30px', background: '#cfd0d1', padding: 1, borderRadius: 3 }}>
-                            <code style={{ color: 'black' }}>
-                              <p>Run the commands below</p>
-                              # pull latest changes
-                              <br />
-                              git pull origin master
-                              <br />
-                              <br />
-                              # install dependencies
-                              <br />
-                              npm install
-                              <br />
-                              <br />
-                              # start maxun
-                              <br />
-                              npm run start
-                            </code>
-                          </Box>
-                        )}
-                        {tab === 1 && (
-                          <Box sx={{ marginLeft: '30px', background: '#cfd0d1', padding: 1, borderRadius: 3 }}>
-                            <code style={{ color: 'black' }}>
-                              <p>Run the commands below</p>
-                              # pull latest docker images
-                              <br />
-                              docker-compose pull
-                              <br />
-                              <br />
-                              # start maxun
-                              <br />
-                              docker-compose up -d
-                            </code>
-                          </Box>
-                        )}
-                      </>
-                    )}
-                  </Box>
-                </Modal>
-                <iframe src="https://ghbtns.com/github-btn.html?user=getmaxun&repo=maxun&type=star&count=true&size=large" frameBorder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
-                <IconButton onClick={handleMenuOpen} sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  borderRadius: '5px',
-                  padding: '8px',
-                  marginRight: '10px',
-                  '&:hover': { backgroundColor: 'white', color: '#ff00c3' }
-                }}>
-                  <AccountCircle sx={{ marginRight: '5px' }} />
-                  <Typography variant="body1">{user.email}</Typography>
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  PaperProps={{ sx: { width: '180px' } }}
-                >
-                  <MenuItem onClick={() => { handleMenuClose(); logout(); }}>
-                    <Logout sx={{ marginRight: '5px' }} /> Logout
-                  </MenuItem>
-                  <MenuItem onClick={() => {
-                    window.open('https://discord.gg/5GbPjBUkws', '_blank');
+                      ) : (
+                        <>
+                          <Typography variant="body1" textAlign="left" sx={{ marginLeft: '30px' }}>
+                            A new version is available: {latestVersion}. Upgrade to the latest version for bug fixes, enhancements and new features!
+                            <br />
+                            View all the new updates
+                            <a href="https://github.com/getmaxun/maxun/releases/" target="_blank" style={{ textDecoration: 'none' }}>{' '}here.</a>
+                          </Typography>
+                          <Tabs
+                            value={tab}
+                            onChange={handleUpdateTabChange}
+                            sx={{ marginTop: 2, marginBottom: 2 }}
+                            centered
+                          >
+                            <Tab label="Manual Setup Upgrade" />
+                            <Tab label="Docker Compose Setup Upgrade" />
+                          </Tabs>
+                          {tab === 0 && (
+                            <Box sx={{ marginLeft: '30px', background: '#cfd0d1', padding: 1, borderRadius: 3 }}>
+                              <code style={{ color: 'black' }}>
+                                <p>Run the commands below</p>
+                                # pull latest changes
+                                <br />
+                                git pull origin master
+                                <br />
+                                <br />
+                                # install dependencies
+                                <br />
+                                npm install
+                                <br />
+                                <br />
+                                # start maxun
+                                <br />
+                                npm run start
+                              </code>
+                            </Box>
+                          )}
+                          {tab === 1 && (
+                            <Box sx={{ marginLeft: '30px', background: '#cfd0d1', padding: 1, borderRadius: 3 }}>
+                              <code style={{ color: 'black' }}>
+                                <p>Run the commands below</p>
+                                # pull latest docker images
+                                <br />
+                                docker-compose pull
+                                <br />
+                                <br />
+                                # start maxun
+                                <br />
+                                docker-compose up -d
+                              </code>
+                            </Box>
+                          )}
+                        </>
+                      )}
+                    </Box>
+                  </Modal>
+                  <iframe src="https://ghbtns.com/github-btn.html?user=getmaxun&repo=maxun&type=star&count=true&size=large" frameBorder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
+                  <IconButton onClick={handleMenuOpen} sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderRadius: '5px',
+                    padding: '8px',
+                    marginRight: '10px',
+                    '&:hover': { backgroundColor: 'white', color: '#ff00c3' }
                   }}>
-                    <DiscordIcon sx={{ marginRight: '5px' }} /> Discord
-                  </MenuItem>
-                  <MenuItem onClick={() => {
-                    window.open('https://www.youtube.com/@MaxunOSS/videos?ref=app', '_blank');
+                    <AccountCircle sx={{ marginRight: '5px' }} />
+                    <Typography variant="body1">{user.email}</Typography>
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    PaperProps={{ sx: { width: '180px' } }}
+                  >
+                    <MenuItem onClick={() => { handleMenuClose(); logout(); }}>
+                      <Logout sx={{ marginRight: '5px' }} /> Logout
+                    </MenuItem>
+                    <MenuItem onClick={() => {
+                      window.open('https://discord.gg/5GbPjBUkws', '_blank');
+                    }}>
+                      <DiscordIcon sx={{ marginRight: '5px' }} /> Discord
+                    </MenuItem>
+                    <MenuItem onClick={() => {
+                      window.open('https://www.youtube.com/@MaxunOSS/videos?ref=app', '_blank');
+                    }}>
+                      <YouTube sx={{ marginRight: '5px' }} /> YouTube
+                    </MenuItem>
+                    <MenuItem onClick={() => {
+                      window.open('https://x.com/maxun_io?ref=app', '_blank');
+                    }}>
+                      <X sx={{ marginRight: '5px' }} /> Twiiter (X)
+                    </MenuItem>
+                  </Menu>
+                </>
+              ) : (
+                <>
+                  <IconButton onClick={goToMainMenu} sx={{
+                    borderRadius: '5px',
+                    padding: '8px',
+                    background: 'red',
+                    color: 'white',
+                    marginRight: '10px',
+                    '&:hover': { color: 'white', backgroundColor: 'red' }
                   }}>
-                    <YouTube sx={{ marginRight: '5px' }} /> YouTube
-                  </MenuItem>
-                  <MenuItem onClick={() => {
-                    window.open('https://x.com/maxun_io?ref=app', '_blank');
-                  }}>
-                    <X sx={{ marginRight: '5px' }} /> Twiiter (X)
-                  </MenuItem>
-                </Menu>
-              </>
-            ) : (
-              <>
-                <IconButton onClick={goToMainMenu} sx={{
-                  borderRadius: '5px',
-                  padding: '8px',
-                  background: 'red',
-                  color: 'white',
-                  marginRight: '10px',
-                  '&:hover': { color: 'white', backgroundColor: 'red' }
-                }}>
-                  <Clear sx={{ marginRight: '5px' }} />
-                  Discard
-                </IconButton>
-                <SaveRecording fileName={recordingName} />
-              </>
-            )}
-          </div>
-        ) : ""
-      }
-    </NavBarWrapper>
+                    <Clear sx={{ marginRight: '5px' }} />
+                    Discard
+                  </IconButton>
+                  <SaveRecording fileName={recordingName} />
+                </>
+              )}
+            </div>
+          ) : ""
+        }
+      </NavBarWrapper>
     </>
   );
 };
