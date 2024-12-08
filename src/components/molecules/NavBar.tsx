@@ -141,10 +141,17 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                         </Tabs>
                         {tab === 0 && (
                           <Box>
-                            <div style={{ background: 'gray', marginLeft: '30px'}}>
-                              git pull origin main
+                            <div style={{ marginLeft: '30px'}}>
+                              <p>Run the commands below</p>
+                              # pull latest changes
+                              <br />
+                              git pull origin master
+                              <br />
+                              # install dependencies
                               <br />
                               npm install
+                              <br />
+                              # start maxun
                               <br />
                               npm run start
                             </div>
@@ -152,8 +159,12 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                         )}
                         {tab === 1 && (
                           <Box>
-                             <div style={{ background: 'gray', marginLeft: '30px'}}>
-                              docker pull getmaxun/maxun:latest
+                             <div style={{ marginLeft: '30px'}}>
+                             <p>Run the commands below</p>
+                              # pull latest docker images
+                              <br />
+                              docker-compose pull
+                              # start maxun
                               <br />
                               docker-compose up -d
                             </div>
