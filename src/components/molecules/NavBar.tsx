@@ -140,34 +140,38 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                           <Tab label="Docker Compose Setup Upgrade" />
                         </Tabs>
                         {tab === 0 && (
-                          <Box>
-                            <div style={{ marginLeft: '30px'}}>
+                          <Box sx={{ marginLeft: '30px', background: '#cfd0d1', padding: 1 }}>
+                            <code style={{ color: 'black'}}>
                               <p>Run the commands below</p>
                               # pull latest changes
                               <br />
                               git pull origin master
                               <br />
+                              <br />
                               # install dependencies
                               <br />
                               npm install
                               <br />
+                              <br />
                               # start maxun
                               <br />
                               npm run start
-                            </div>
+                            </code>
                           </Box>
                         )}
                         {tab === 1 && (
-                          <Box>
-                             <div style={{ marginLeft: '30px'}}>
+                          <Box sx={{ marginLeft: '30px', background: '#cfd0d1', padding: 1 }}>
+                             <code style={{ color: 'black'}}>
                              <p>Run the commands below</p>
                               # pull latest docker images
                               <br />
                               docker-compose pull
+                              <br />
+                              <br />
                               # start maxun
                               <br />
                               docker-compose up -d
-                            </div>
+                            </code>
                           </Box>
                         )}
                       </>
