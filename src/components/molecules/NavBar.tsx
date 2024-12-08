@@ -141,7 +141,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                         </Tabs>
                         {tab === 0 && (
                           <Box sx={{ marginLeft: '30px', background: '#cfd0d1', padding: 1 }}>
-                            <code style={{ color: 'black'}}>
+                            <code style={{ color: 'black' }}>
                               <p>Run the commands below</p>
                               # pull latest changes
                               <br />
@@ -161,8 +161,8 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                         )}
                         {tab === 1 && (
                           <Box sx={{ marginLeft: '30px', background: '#cfd0d1', padding: 1 }}>
-                             <code style={{ color: 'black'}}>
-                             <p>Run the commands below</p>
+                            <code style={{ color: 'black' }}>
+                              <p>Run the commands below</p>
                               # pull latest docker images
                               <br />
                               docker-compose pull
