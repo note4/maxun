@@ -127,11 +127,11 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                       </Typography>
                     ) : (
                       <>
-                        <Typography variant="body1" textAlign="left" sx={{ marginLeft: '30px'}}>
+                        <Typography variant="body1" textAlign="left" sx={{ marginLeft: '30px' }}>
                           A new version is available: {latestVersion}. Upgrade to the latest version for bug fixes, enhancements and new features!
                           <br />
                           View all the new updates
-                          <a href="https://github.com/getmaxun/maxun/releases/" target="_blank" style={{ textDecoration: 'none'}}>{' '}here.</a>
+                          <a href="https://github.com/getmaxun/maxun/releases/" target="_blank" style={{ textDecoration: 'none' }}>{' '}here.</a>
                         </Typography>
                         <Tabs
                           value={tab}
