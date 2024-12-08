@@ -106,12 +106,12 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                     <DiscordIcon sx={{ marginRight: '5px' }} /> Discord
                   </MenuItem>
                   <MenuItem onClick={() => {
-                    window.open('https://www.youtube.com/@MaxunOSS/videos', '_blank');
+                    window.open('https://www.youtube.com/@MaxunOSS/videos?ref=app', '_blank');
                   }}>
                     <YouTube sx={{ marginRight: '5px' }} /> YouTube
                   </MenuItem>
                   <MenuItem onClick={() => {
-                    window.open('https://x.com/maxun_io', '_blank');
+                    window.open('https://x.com/maxun_io?ref=app', '_blank');
                   }}>
                     <X sx={{ marginRight: '5px' }} /> Twiiter (X)
                   </MenuItem>
