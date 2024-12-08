@@ -103,69 +103,69 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
             {!isRecording ? (
               <>
-              <Button variant="contained" onClick={handleUpdateOpen}>
-        Check for Updates
-      </Button>
-      <Modal open={open} onClose={handleUpdateClose}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-          }}
-        >
-          {latestVersion === null ? (
-            <Typography>Checking for updates...</Typography>
-          ) : currentVersion === latestVersion ? (
-            <Typography variant="h6" textAlign="center">
-              🎉 You're up to date!
-            </Typography>
-          ) : (
-            <>
-              <Typography variant="h6" textAlign="center">
-                A new version is available: {latestVersion}
-              </Typography>
-              <Tabs
-                value={tab}
-                onChange={handleUpdateTabChange}
-                sx={{ marginTop: 2, marginBottom: 2 }}
-                centered
-              >
-                <Tab label="Manual" />
-                <Tab label="Docker Compose" />
-              </Tabs>
-              {tab === 0 && (
-                <Box>
-                  <Typography variant="h6">Manual Upgrade</Typography>
-                  <Typography component="pre" sx={{ bgcolor: "#f5f5f5", p: 2, borderRadius: 1 }}>
-                    git pull origin main
-                    <br />
-                    npm install
-                    <br />
-                    npm run start
-                  </Typography>
-                </Box>
-              )}
-              {tab === 1 && (
-                <Box>
-                  <Typography variant="h6">Docker Compose Upgrade</Typography>
-                  <Typography component="pre" sx={{ bgcolor: "#f5f5f5", p: 2, borderRadius: 1 }}>
-                    docker pull getmaxun/maxun:latest
-                    <br />
-                    docker-compose up -d
-                  </Typography>
-                </Box>
-              )}
-            </>
-          )}
-        </Box>
-      </Modal>
+                <Button variant="contained" onClick={handleUpdateOpen}>
+                  Check for Updates
+                </Button>
+                <Modal open={open} onClose={handleUpdateClose}>
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      width: 400,
+                      bgcolor: "background.paper",
+                      boxShadow: 24,
+                      p: 4,
+                      borderRadius: 2,
+                    }}
+                  >
+                    {latestVersion === null ? (
+                      <Typography>Checking for updates...</Typography>
+                    ) : currentVersion === latestVersion ? (
+                      <Typography variant="h6" textAlign="center">
+                        🎉 You're up to date!
+                      </Typography>
+                    ) : (
+                      <>
+                        <Typography variant="h6" textAlign="center">
+                          A new version is available: {latestVersion}
+                        </Typography>
+                        <Tabs
+                          value={tab}
+                          onChange={handleUpdateTabChange}
+                          sx={{ marginTop: 2, marginBottom: 2 }}
+                          centered
+                        >
+                          <Tab label="Manual" />
+                          <Tab label="Docker Compose" />
+                        </Tabs>
+                        {tab === 0 && (
+                          <Box>
+                            <Typography variant="h6">Manual Upgrade</Typography>
+                            <Typography component="pre" sx={{ bgcolor: "#f5f5f5", p: 2, borderRadius: 1 }}>
+                              git pull origin main
+                              <br />
+                              npm install
+                              <br />
+                              npm run start
+                            </Typography>
+                          </Box>
+                        )}
+                        {tab === 1 && (
+                          <Box>
+                            <Typography variant="h6">Docker Compose Upgrade</Typography>
+                            <Typography component="pre" sx={{ bgcolor: "#f5f5f5", p: 2, borderRadius: 1 }}>
+                              docker pull getmaxun/maxun:latest
+                              <br />
+                              docker-compose up -d
+                            </Typography>
+                          </Box>
+                        )}
+                      </>
+                    )}
+                  </Box>
+                </Modal>
                 <iframe src="https://ghbtns.com/github-btn.html?user=getmaxun&repo=maxun&type=star&count=true&size=large" frameBorder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
                 <IconButton onClick={handleMenuOpen} sx={{
                   display: 'flex',
@@ -190,7 +190,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                     vertical: 'top',
                     horizontal: 'right',
                   }}
-                  PaperProps={{sx: {width: '180px'}}}
+                  PaperProps={{ sx: { width: '180px' } }}
                 >
                   <MenuItem onClick={() => { handleMenuClose(); logout(); }}>
                     <Logout sx={{ marginRight: '5px' }} /> Logout
