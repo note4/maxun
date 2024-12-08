@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import styled from "styled-components";
 import { stopRecording } from "../../api/recording";
 import { useGlobalInfoStore } from "../../context/globalInfo";
-import { IconButton, Menu, MenuItem, Typography, Chip, Button, Modal, Tabs, Tab, Box } from "@mui/material";
+import { IconButton, Menu, MenuItem, Typography, Chip, Button, Modal, Tabs, Tab, Box, Snackbar } from "@mui/material";
 import { AccountCircle, Logout, Clear, YouTube, X, Update } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/auth';
@@ -28,18 +28,19 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
   const currentVersion = packageJson.version;
 
   const [open, setOpen] = useState(false);
-  const [latestVersion, setLatestVersion] = useState(null);
+  const [latestVersion, setLatestVersion] = useState<string | null>(null);
   const [tab, setTab] = useState(0);
+  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
 
-  const fetchLatestVersion = async () => {
+  const fetchLatestVersion = async (): Promise<string | null> => {
     try {
       const response = await fetch("https://api.github.com/repos/getmaxun/maxun/releases/latest");
       const data = await response.json();
       const version = data.tag_name.replace(/^v/, ""); // Remove 'v' prefix
-      setLatestVersion(version);
+      return version;
     } catch (error) {
       console.error("Failed to fetch latest version:", error);
-      setLatestVersion(null); // Handle errors gracefully
+      return null; // Handle errors gracefully
     }
   };
 
@@ -82,7 +83,30 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
     navigate('/');
   };
 
+  useEffect(() => {
+    const checkForUpdates = async () => {
+      const latestVersion = await fetchLatestVersion();
+      setLatestVersion(latestVersion); // Set the latest version state
+      if (latestVersion && latestVersion !== currentVersion) {
+        setIsUpdateAvailable(true); // Show a notification or highlight the "Upgrade" button
+      }
+    };
+    checkForUpdates();
+  }, []);
+
   return (
+    <>
+    {isUpdateAvailable && (
+  <Snackbar
+    open={true}
+    message={`New version ${latestVersion} available! Click "Upgrade Maxun" to update.`}
+    action={
+      <Button color="secondary" size="small" onClick={handleUpdateOpen}>
+        Upgrade
+      </Button>
+    }
+  />
+)}
     <NavBarWrapper>
       <div style={{
         display: 'flex',
@@ -252,6 +276,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
         ) : ""
       }
     </NavBarWrapper>
+    </>
   );
 };
 
