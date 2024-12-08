@@ -110,6 +110,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                     vertical: 'top',
                     horizontal: 'right',
                   }}
+                  PaperProps={{sx: {width: '180px'}}}
                 >
                   <MenuItem onClick={() => { handleMenuClose(); logout(); }}>
                     <Logout sx={{ marginRight: '5px' }} /> Logout
