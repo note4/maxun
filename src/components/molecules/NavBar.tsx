@@ -99,24 +99,23 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
       {isUpdateAvailable && (
         <Snackbar
         open={isUpdateAvailable}
-        onClose={() => setIsUpdateAvailable(false)} // Close when clicking the close button
+        onClose={() => setIsUpdateAvailable(false)}
         message={
-          <span style={{ color: 'black' }}>
-            New version {latestVersion} available! Click "Upgrade Maxun" to update.
-          </span>
+            `New version ${latestVersion} available! Click "Upgrade" to update.`
         }
         action={
           <>
             <Button
               color="primary"
               size="small"
-              onClick={handleUpdateOpen} // Open the upgrade modal
+              onClick={handleUpdateOpen}
               style={{
                 backgroundColor: '#ff00c3',
                 color: 'white',
                 fontWeight: 'bold',
                 textTransform: 'none',
                 marginRight: '8px',
+                borderRadius: '5px',
               }}
             >
               Upgrade
@@ -125,17 +124,18 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
               size="small"
               aria-label="close"
               color="inherit"
-              onClick={() => setIsUpdateAvailable(false)} // Close Snackbar
+              onClick={() => setIsUpdateAvailable(false)}
               style={{ color: 'black' }}
             >
               <Close />
             </IconButton>
           </>
         }
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} // Position of Snackbar
-        sx={{
-          backgroundColor: 'white',
-          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+        ContentProps={{
+          sx: {
+            background: "white",
+            color: "black",
+          }
         }}
       />
       
