@@ -43,17 +43,17 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
     }
   };
 
-  const handleOpen = () => {
+  const handleUpdateOpen = () => {
     setOpen(true);
     fetchLatestVersion();
   };
 
-  const handleClose = () => {
+  const handleUpdateClose = () => {
     setOpen(false);
     setTab(0); // Reset tab to the first tab
   };
 
-  const handleTabChange = (newValue: any) => {
+  const handleUpdateTabChange = (newValue: any) => {
     setTab(newValue);
   };
 
@@ -103,10 +103,10 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
             {!isRecording ? (
               <>
-              <Button variant="contained" onClick={handleOpen}>
+              <Button variant="contained" onClick={handleUpdateOpen}>
         Check for Updates
       </Button>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleUpdateClose}>
         <Box
           sx={{
             position: "absolute",
@@ -133,7 +133,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
               </Typography>
               <Tabs
                 value={tab}
-                onChange={handleTabChange}
+                onChange={handleUpdateTabChange}
                 sx={{ marginTop: 2, marginBottom: 2 }}
                 centered
               >
