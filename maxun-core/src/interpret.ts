@@ -121,24 +121,30 @@ export default class Interpreter extends EventEmitter {
     }
   }
 
-  // private getPreviousSelectors(workflow: Workflow, actionId: number): string[] {
+  // private getSelectors(workflow: Workflow, actionId: number): string[] {
   //   const selectors: string[] = [];
-  //   let index = actionId - 1;
 
-  //   while (index >= 0) {
-  //       const previousSelectors = workflow[index]?.where?.selectors;
-  //       console.log("Previous Selectors:", previousSelectors);
-  //       if (previousSelectors && previousSelectors.length > 0) {
-  //           previousSelectors.forEach((selector) => {
+  //   // Validate actionId
+  //   if (actionId <= 0) {
+  //       console.log("No previous selectors to collect.");
+  //       return selectors; // Empty array as there are no previous steps
+  //   }
+
+  //   // Iterate from the start up to (but not including) actionId
+  //   for (let index = 0; index < actionId; index++) {
+  //       const currentSelectors = workflow[index]?.where?.selectors;
+  //       console.log(`Selectors at step ${index}:`, currentSelectors);
+
+  //       if (currentSelectors && currentSelectors.length > 0) {
+  //           currentSelectors.forEach((selector) => {
   //               if (!selectors.includes(selector)) {
   //                   selectors.push(selector); // Avoid duplicates
   //               }
   //           });
-  //           break; // Exit the loop once valid selectors are found
   //       }
-  //       index--; // Move further back in the workflow
   //   }
 
+  //   console.log("Collected Selectors:", selectors);
   //   return selectors;
   // }
 
@@ -208,12 +214,14 @@ export default class Interpreter extends EventEmitter {
     //     return [];
     //   }),
     // ).then((x) => x.flat());
-
+    
     const action = workflowCopy[workflowCopy.length - 1];
+
+    // console.log("Next action:", action)
 
     let url: any = page.url();
 
-    if (action && action.where.url !== url) {
+    if (action && action.where.url !== url && action.where.url !== "about:blank") {
       url = action.where.url;
     }
 
@@ -700,7 +708,7 @@ export default class Interpreter extends EventEmitter {
           usedActions.push(action.id ?? 'undefined');
 
           workflowCopy.splice(actionId, 1);
-          console.log(`Action with ID ${actionId} removed from the workflow copy.`);
+          console.log(`Action with ID ${action.id} removed from the workflow copy.`);
           
           // const newSelectors = this.getPreviousSelectors(workflow, actionId);
           const newSelectors = this.getSelectors(workflowCopy);
