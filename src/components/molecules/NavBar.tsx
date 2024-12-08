@@ -3,7 +3,7 @@ import axios from 'axios';
 import styled from "styled-components";
 import { stopRecording } from "../../api/recording";
 import { useGlobalInfoStore } from "../../context/globalInfo";
-import { IconButton, Menu, MenuItem, Typography, Avatar, Chip, Button, Modal, Tabs, Tab, Box } from "@mui/material";
+import { IconButton, Menu, MenuItem, Typography, Chip, Button, Modal, Tabs, Tab, Box } from "@mui/material";
 import { AccountCircle, Logout, Clear, YouTube, X } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/auth';
