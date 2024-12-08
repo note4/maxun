@@ -53,7 +53,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
     setTab(0); // Reset tab to the first tab
   };
 
-  const handleUpdateTabChange = (newValue: any) => {
+  const handleUpdateTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
 
