@@ -57,7 +57,6 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
     setTab(newValue);
   };
 
-
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -103,7 +102,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
             {!isRecording ? (
               <>
-                <Button variant="contained" onClick={handleUpdateOpen} sx={{marginRight: '30px'}}>
+                <Button variant="contained" onClick={handleUpdateOpen} sx={{ marginRight: '30px' }}>
                   Check for Updates
                 </Button>
                 <Modal open={open} onClose={handleUpdateClose}>
