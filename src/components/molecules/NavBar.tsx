@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { stopRecording } from "../../api/recording";
 import { useGlobalInfoStore } from "../../context/globalInfo";
 import { IconButton, Menu, MenuItem, Typography, Chip, Button, Modal, Tabs, Tab, Box, Snackbar } from "@mui/material";
-import { AccountCircle, Logout, Clear, YouTube, X, Update } from "@mui/icons-material";
+import { AccountCircle, Logout, Clear, YouTube, X, Update, Close } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/auth';
 import { SaveRecording } from '../molecules/SaveRecording';
@@ -98,14 +98,47 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
     <>
       {isUpdateAvailable && (
         <Snackbar
-          open={true}
-          message={`New version ${latestVersion} available! Click "Upgrade Maxun" to update.`}
-          action={
-            <Button color="secondary" size="small" onClick={handleUpdateOpen}>
+        open={isUpdateAvailable}
+        onClose={() => setIsUpdateAvailable(false)} // Close when clicking the close button
+        message={
+          <span style={{ color: 'black' }}>
+            New version {latestVersion} available! Click "Upgrade Maxun" to update.
+          </span>
+        }
+        action={
+          <>
+            <Button
+              color="primary"
+              size="small"
+              onClick={handleUpdateOpen} // Open the upgrade modal
+              style={{
+                backgroundColor: '#ff00c3',
+                color: 'white',
+                fontWeight: 'bold',
+                textTransform: 'none',
+                marginRight: '8px',
+              }}
+            >
               Upgrade
             </Button>
-          }
-        />
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={() => setIsUpdateAvailable(false)} // Close Snackbar
+              style={{ color: 'black' }}
+            >
+              <Close />
+            </IconButton>
+          </>
+        }
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} // Position of Snackbar
+        sx={{
+          backgroundColor: 'white',
+          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+        }}
+      />
+      
       )}
       <NavBarWrapper>
         <div style={{
