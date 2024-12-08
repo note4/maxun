@@ -114,7 +114,9 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                   <MenuItem onClick={() => { handleMenuClose(); logout(); }}>
                     <Logout sx={{ marginRight: '5px' }} /> Logout
                   </MenuItem>
-                  <MenuItem onClick={() => { handleMenuClose(); logout(); }}>
+                  <MenuItem onClick={() => { 
+                              window.open('https://www.youtube.com/@MaxunOSS/videos', '_blank');
+                  }}>
                     <YouTube sx={{ marginRight: '5px' }} /> YouTube
                   </MenuItem>
                 </Menu>
