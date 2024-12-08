@@ -3,7 +3,7 @@ import axios from 'axios';
 import styled from "styled-components";
 import { stopRecording } from "../../api/recording";
 import { useGlobalInfoStore } from "../../context/globalInfo";
-import { IconButton, Menu, MenuItem, Typography, Avatar, Chip, } from "@mui/material";
+import { IconButton, Menu, MenuItem, Typography, Avatar, Chip, Button, Modal, Tabs, Tab, Box } from "@mui/material";
 import { AccountCircle, Logout, Clear, YouTube, X } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/auth';
@@ -25,6 +25,38 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const currentVersion = "0.0.3"; // Dynamically fetch from package.json
+
+  const [open, setOpen] = useState(false);
+  const [latestVersion, setLatestVersion] = useState(null);
+  const [tab, setTab] = useState(0);
+
+  const fetchLatestVersion = async () => {
+    try {
+      const response = await fetch("https://api.github.com/repos/getmaxun/maxun/releases/latest");
+      const data = await response.json();
+      const version = data.tag_name.replace(/^v/, ""); // Remove 'v' prefix
+      setLatestVersion(version);
+    } catch (error) {
+      console.error("Failed to fetch latest version:", error);
+      setLatestVersion(null); // Handle errors gracefully
+    }
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+    fetchLatestVersion();
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setTab(0); // Reset tab to the first tab
+  };
+
+  const handleTabChange = (newValue: any) => {
+    setTab(newValue);
+  };
+
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -71,6 +103,69 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
             {!isRecording ? (
               <>
+              <Button variant="contained" onClick={handleOpen}>
+        Check for Updates
+      </Button>
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          {latestVersion === null ? (
+            <Typography>Checking for updates...</Typography>
+          ) : currentVersion === latestVersion ? (
+            <Typography variant="h6" textAlign="center">
+              🎉 You're up to date!
+            </Typography>
+          ) : (
+            <>
+              <Typography variant="h6" textAlign="center">
+                A new version is available: {latestVersion}
+              </Typography>
+              <Tabs
+                value={tab}
+                onChange={handleTabChange}
+                sx={{ marginTop: 2, marginBottom: 2 }}
+                centered
+              >
+                <Tab label="Manual" />
+                <Tab label="Docker Compose" />
+              </Tabs>
+              {tab === 0 && (
+                <Box>
+                  <Typography variant="h6">Manual Upgrade</Typography>
+                  <Typography component="pre" sx={{ bgcolor: "#f5f5f5", p: 2, borderRadius: 1 }}>
+                    git pull origin main
+                    <br />
+                    npm install
+                    <br />
+                    npm run start
+                  </Typography>
+                </Box>
+              )}
+              {tab === 1 && (
+                <Box>
+                  <Typography variant="h6">Docker Compose Upgrade</Typography>
+                  <Typography component="pre" sx={{ bgcolor: "#f5f5f5", p: 2, borderRadius: 1 }}>
+                    docker pull getmaxun/maxun:latest
+                    <br />
+                    docker-compose up -d
+                  </Typography>
+                </Box>
+              )}
+            </>
+          )}
+        </Box>
+      </Modal>
                 <iframe src="https://ghbtns.com/github-btn.html?user=getmaxun&repo=maxun&type=star&count=true&size=large" frameBorder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
                 <IconButton onClick={handleMenuOpen} sx={{
                   display: 'flex',
