@@ -98,47 +98,47 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
     <>
       {isUpdateAvailable && (
         <Snackbar
-        open={isUpdateAvailable}
-        onClose={() => setIsUpdateAvailable(false)}
-        message={
+          open={isUpdateAvailable}
+          onClose={() => setIsUpdateAvailable(false)}
+          message={
             `New version ${latestVersion} available! Click "Upgrade" to update.`
-        }
-        action={
-          <>
-            <Button
-              color="primary"
-              size="small"
-              onClick={handleUpdateOpen}
-              style={{
-                backgroundColor: '#ff00c3',
-                color: 'white',
-                fontWeight: 'bold',
-                textTransform: 'none',
-                marginRight: '8px',
-                borderRadius: '5px',
-              }}
-            >
-              Upgrade
-            </Button>
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={() => setIsUpdateAvailable(false)}
-              style={{ color: 'black' }}
-            >
-              <Close />
-            </IconButton>
-          </>
-        }
-        ContentProps={{
-          sx: {
-            background: "white",
-            color: "black",
           }
-        }}
-      />
-      
+          action={
+            <>
+              <Button
+                color="primary"
+                size="small"
+                onClick={handleUpdateOpen}
+                style={{
+                  backgroundColor: '#ff00c3',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  textTransform: 'none',
+                  marginRight: '8px',
+                  borderRadius: '5px',
+                }}
+              >
+                Upgrade
+              </Button>
+              <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={() => setIsUpdateAvailable(false)}
+                style={{ color: 'black' }}
+              >
+                <Close />
+              </IconButton>
+            </>
+          }
+          ContentProps={{
+            sx: {
+              background: "white",
+              color: "black",
+            }
+          }}
+        />
+
       )}
       <NavBarWrapper>
         <div style={{
