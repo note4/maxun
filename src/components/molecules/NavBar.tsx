@@ -25,7 +25,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const currentVersion = "0.0.3"; // Dynamically fetch from package.json
+  const currentVersion = packageJson.version;
 
   const [open, setOpen] = useState(false);
   const [latestVersion, setLatestVersion] = useState(null);
@@ -92,7 +92,7 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
         <img src={MaxunLogo} width={45} height={40} style={{ borderRadius: '5px', margin: '5px 0px 5px 15px' }} />
         <div style={{ padding: '11px' }}><ProjectName>Maxun</ProjectName></div>
         <Chip
-          label={`v${packageJson.version}`}
+          label={`v${currentVersion}`}
           color="primary"
           variant="outlined"
           sx={{ marginTop: '10px' }}
