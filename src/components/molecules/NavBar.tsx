@@ -136,8 +136,8 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                           sx={{ marginTop: 2, marginBottom: 2 }}
                           centered
                         >
-                          <Tab label="Manual" />
-                          <Tab label="Docker Compose" />
+                          <Tab label="Manual Setup" />
+                          <Tab label="Docker Compose Setup" />
                         </Tabs>
                         {tab === 0 && (
                           <Box>
