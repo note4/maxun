@@ -116,6 +116,11 @@ export const NavBar: React.FC<NavBarProps> = ({ recordingName, isRecording }) =>
                     <Logout sx={{ marginRight: '5px' }} /> Logout
                   </MenuItem>
                   <MenuItem onClick={() => {
+                    window.open('https://discord.gg/5GbPjBUkws', '_blank');
+                  }}>
+                    <DiscordIcon sx={{ marginRight: '5px' }} /> Discord
+                  </MenuItem>
+                  <MenuItem onClick={() => {
                     window.open('https://www.youtube.com/@MaxunOSS/videos', '_blank');
                   }}>
                     <YouTube sx={{ marginRight: '5px' }} /> YouTube
