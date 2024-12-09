@@ -374,6 +374,7 @@ export class RemoteBrowser {
 
             this.currentPage.on('framenavigated', (frame) => {
                 if (frame === this.currentPage?.mainFrame()) {
+                    this.currentPage.evaluate(getInjectableScript());
                     this.socket.emit('urlChanged', this.currentPage.url());
                 }
             });
@@ -406,6 +407,7 @@ export class RemoteBrowser {
         if (this.currentPage) {
             this.currentPage.on('framenavigated', (frame) => {
                 if (frame === this.currentPage?.mainFrame()) {
+                    this.currentPage.evaluate(getInjectableScript());
                     this.socket.emit('urlChanged', this.currentPage.url());
                 }
             });
