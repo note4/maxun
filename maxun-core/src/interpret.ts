@@ -475,6 +475,8 @@ export default class Interpreter extends EventEmitter {
         case 'clickNext':
           const pageResults = await page.evaluate((cfg) => window.scrapeList(cfg), config);
 
+          // console.log("Page results:", pageResults);
+          
           // Filter out already scraped items
           const newResults = pageResults.filter(item => {
             const uniqueKey = JSON.stringify(item);
@@ -482,9 +484,9 @@ export default class Interpreter extends EventEmitter {
             scrapedItems.add(uniqueKey); // Mark as scraped
             return true;
           });
-
+          
           allResults = allResults.concat(newResults);
-
+          
           if (config.limit && allResults.length >= config.limit) {
             return allResults.slice(0, config.limit);
           }
@@ -494,7 +496,7 @@ export default class Interpreter extends EventEmitter {
             return allResults; // No more pages to scrape
           }
           await Promise.all([
-            nextButton.click(),
+            nextButton.dispatchEvent('click'),
             page.waitForNavigation({ waitUntil: 'networkidle' })
           ]);
 
