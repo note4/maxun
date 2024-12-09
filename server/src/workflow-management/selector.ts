@@ -823,7 +823,11 @@ export const getNonUniqueSelectors = async (page: Page, coordinates: Coordinates
 
       let element = originalEl;
       
-      // Find the most appropriate parent element
+      if (originalEl.tagName === 'A') {
+        element = originalEl;
+      } else if (originalEl.parentElement?.tagName === 'A') {
+        element = originalEl.parentElement;
+      } else {
       while (element.parentElement) {
         const parentRect = element.parentElement.getBoundingClientRect();
         const childRect = element.getBoundingClientRect();
@@ -844,6 +848,7 @@ export const getNonUniqueSelectors = async (page: Page, coordinates: Coordinates
           break;
         }
       }
+    }
 
       const generalSelector = getSelectorPath(element);
       return {
