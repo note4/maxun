@@ -15,6 +15,7 @@ import { InterpreterSettings, RemoteBrowserOptions } from "../../types";
 import { WorkflowGenerator } from "../../workflow-management/classes/Generator";
 import { WorkflowInterpreter } from "../../workflow-management/classes/Interpreter";
 import { getDecryptedProxyConfig } from '../../routes/proxy';
+import { getInjectableScript } from 'idcac-playwright';
 chromium.use(stealthPlugin());
 
 
@@ -168,6 +169,7 @@ export class RemoteBrowser {
 
         this.currentPage.on('framenavigated', (frame) => {
             if (frame === this.currentPage?.mainFrame()) {
+                this.currentPage.evaluate(getInjectableScript())
                 this.socket.emit('urlChanged', this.currentPage.url());
             }
         });
