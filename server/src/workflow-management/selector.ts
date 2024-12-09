@@ -27,15 +27,33 @@ export const getElementInformation = async (
   try {
     const elementInfo = await page.evaluate(
       async ({ x, y }) => {
-        // Find the initial element at the point
-        const initialElement = document.elementFromPoint(x, y) as HTMLElement;
-        
-        if (initialElement) {
-          // Simply use the direct parent, no complex logic
-          const parentElement = initialElement.parentElement;
+        const originalEl = document.elementFromPoint(x, y) as HTMLElement;
+        if (originalEl) {
+          let element = originalEl;
+          
+          // Generic parent finding logic based on visual containment
+          while (element.parentElement) {
+            const parentRect = element.parentElement.getBoundingClientRect();
+            const childRect = element.getBoundingClientRect();
 
-          // Use the parent if it exists, otherwise use the initial element
-          const element = parentElement || initialElement;
+            // Check if parent visually contains the child
+            const fullyContained = 
+              parentRect.left <= childRect.left &&
+              parentRect.right >= childRect.right &&
+              parentRect.top <= childRect.top &&
+              parentRect.bottom >= childRect.bottom;
+
+            // Additional checks for more comprehensive containment
+            const significantOverlap = 
+              (childRect.width * childRect.height) / 
+              (parentRect.width * parentRect.height) > 0.5;
+
+            if (fullyContained && significantOverlap) {
+              element = element.parentElement;
+            } else {
+              break;
+            }
+          }
 
           let info: {
             tagName: string;
@@ -46,44 +64,34 @@ export const getElementInformation = async (
             attributes?: Record<string, string>;
             innerHTML?: string;
             outerHTML?: string;
-            parentTagName?: string;
-            parentClasses?: string[];
           } = {
-            tagName: element.tagName,
-            parentTagName: element.parentElement?.tagName,
-            parentClasses: element.parentElement 
-              ? Array.from(element.parentElement.classList) 
-              : []
+            tagName: element?.tagName ?? '',
           };
 
-          // Collect attributes
-          info.attributes = Array.from(element.attributes).reduce(
-            (acc, attr) => {
-              acc[attr.name] = attr.value;
-              return acc;
-            },
-            {} as Record<string, string>
-          );
-
-          // Specific handling for different element types
-          if (element.tagName === 'A') {
-            const anchorElement = element as HTMLAnchorElement;
-            info.url = anchorElement.href;
-            info.innerText = anchorElement.innerText ?? '';
-          } else if (element.tagName === 'IMG') {
-            const imgElement = element as HTMLImageElement;
-            info.imageUrl = imgElement.src;
-          } else {
-            // Check if element contains only text
-            info.hasOnlyText = element.children.length === 0 &&
-              (element.innerText?.length ?? 0) > 0;
-            info.innerText = element.innerText ?? '';
+          if (element) {
+            info.attributes = Array.from(element.attributes).reduce(
+              (acc, attr) => {
+                acc[attr.name] = attr.value;
+                return acc;
+              },
+              {} as Record<string, string>
+            );
           }
 
-          // HTML content
+          // Existing tag-specific logic
+          if (element?.tagName === 'A') {
+            info.url = (element as HTMLAnchorElement).href;
+            info.innerText = element.innerText ?? '';
+          } else if (element?.tagName === 'IMG') {
+            info.imageUrl = (element as HTMLImageElement).src;
+          } else {
+            info.hasOnlyText = element?.children?.length === 0 &&
+              element?.innerText?.length > 0;
+            info.innerText = element?.innerText ?? '';
+          }
+
           info.innerHTML = element.innerHTML;
           info.outerHTML = element.outerHTML;
-
           return info;
         }
         return null;
@@ -102,17 +110,32 @@ export const getRect = async (page: Page, coordinates: Coordinates) => {
   try {
     const rect = await page.evaluate(
       async ({ x, y }) => {
-        // Find the initial element at the point
-        const initialElement = document.elementFromPoint(x, y) as HTMLElement;
-        
-        if (initialElement) {
-          // Simply use the direct parent, no complex logic
-          const parentElement = initialElement.parentElement;
+        const originalEl = document.elementFromPoint(x, y) as HTMLElement;
+        if (originalEl) {
+          let element = originalEl;
+          
+          // Same parent-finding logic as in getElementInformation
+          while (element.parentElement) {
+            const parentRect = element.parentElement.getBoundingClientRect();
+            const childRect = element.getBoundingClientRect();
 
-          // Use the parent if it exists, otherwise use the initial element
-          const element = parentElement || initialElement;
+            const fullyContained = 
+              parentRect.left <= childRect.left &&
+              parentRect.right >= childRect.right &&
+              parentRect.top <= childRect.top &&
+              parentRect.bottom >= childRect.bottom;
 
-          // Get bounding rectangle
+            const significantOverlap = 
+              (childRect.width * childRect.height) / 
+              (parentRect.width * parentRect.height) > 0.5;
+
+            if (fullyContained && significantOverlap) {
+              element = element.parentElement;
+            } else {
+              break;
+            }
+          }
+
           const rectangle = element?.getBoundingClientRect();
           
           if (rectangle) {
@@ -134,10 +157,11 @@ export const getRect = async (page: Page, coordinates: Coordinates) => {
     return rect;
   } catch (error) {
     const { message, stack } = error as Error;
-    console.error('Error while retrieving selector:', message);
-    console.error('Stack:', stack);
+    logger.log('error', `Error while retrieving selector: ${message}`);
+    logger.log('error', `Stack: ${stack}`);
   }
-};
+}
+
 
 /**
  * Returns the best and unique css {@link Selectors} for the element on the page.
@@ -774,25 +798,42 @@ export const getNonUniqueSelectors = async (page: Page, coordinates: Coordinates
         let depth = 0;
         const maxDepth = 2;
 
-        // Ensure we start with a valid element
-        let currentElement = element;
-        while (currentElement && currentElement !== document.body && depth < maxDepth) {
-          const selector = getNonUniqueSelector(currentElement);
+        while (element && element !== document.body && depth < maxDepth) {
+          const selector = getNonUniqueSelector(element);
           path.unshift(selector);
-          currentElement = currentElement.parentElement;
+          element = element.parentElement;
           depth++;
         }
 
         return path.join(' > ');
       }
 
-      // Find the initial element at the point
-      const initialElement = document.elementFromPoint(x, y) as HTMLElement;
-      
-      if (!initialElement) return null;
+      const originalEl = document.elementFromPoint(x, y) as HTMLElement;
+      if (!originalEl) return null;
 
-      // Prefer parent if exists, otherwise use initial element
-      const element = initialElement.parentElement || initialElement;
+      let element = originalEl;
+      
+      // Find the most appropriate parent element
+      while (element.parentElement) {
+        const parentRect = element.parentElement.getBoundingClientRect();
+        const childRect = element.getBoundingClientRect();
+
+        const fullyContained = 
+          parentRect.left <= childRect.left &&
+          parentRect.right >= childRect.right &&
+          parentRect.top <= childRect.top &&
+          parentRect.bottom >= childRect.bottom;
+
+        const significantOverlap = 
+          (childRect.width * childRect.height) / 
+          (parentRect.width * parentRect.height) > 0.5;
+
+        if (fullyContained && significantOverlap) {
+          element = element.parentElement;
+        } else {
+          break;
+        }
+      }
 
       const generalSelector = getSelectorPath(element);
       return {
@@ -806,7 +847,6 @@ export const getNonUniqueSelectors = async (page: Page, coordinates: Coordinates
     return { generalSelector: '' };
   }
 };
-
 
 export const getChildSelectors = async (page: Page, parentSelector: string): Promise<string[]> => {
   try {
