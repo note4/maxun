@@ -31,6 +31,11 @@ export const getElementInformation = async (
         if (originalEl) {
           let element = originalEl;
           
+          if (originalEl.tagName === 'A') {
+            element = originalEl;
+          } else if (originalEl.parentElement?.tagName === 'A') {
+            element = originalEl.parentElement;
+          } else {
           // Generic parent finding logic based on visual containment
           while (element.parentElement) {
             const parentRect = element.parentElement.getBoundingClientRect();
@@ -53,7 +58,7 @@ export const getElementInformation = async (
             } else {
               break;
             }
-          }
+          } }
 
           let info: {
             tagName: string;
@@ -114,7 +119,11 @@ export const getRect = async (page: Page, coordinates: Coordinates) => {
         if (originalEl) {
           let element = originalEl;
           
-          // Same parent-finding logic as in getElementInformation
+          if (originalEl.tagName === 'A') {
+            element = originalEl;
+          } else if (originalEl.parentElement?.tagName === 'A') {
+            element = originalEl.parentElement;
+          } else {
           while (element.parentElement) {
             const parentRect = element.parentElement.getBoundingClientRect();
             const childRect = element.getBoundingClientRect();
@@ -134,8 +143,9 @@ export const getRect = async (page: Page, coordinates: Coordinates) => {
             } else {
               break;
             }
-          }
+          }}
 
+          //element = element?.parentElement?.tagName === 'A' ? element?.parentElement : element;
           const rectangle = element?.getBoundingClientRect();
           
           if (rectangle) {
