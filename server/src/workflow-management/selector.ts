@@ -1,8 +1,7 @@
 import { Page } from "playwright";
-import { Action, ActionType, Coordinates, TagName } from "../types";
+import { Coordinates } from "../types";
 import { WhereWhatPair, WorkflowFile } from "maxun-core";
 import logger from "../logger";
-import { getBestSelectorForAction } from "./utils";
 
 /*TODO:
 1. Handle TS errors (here we definetly know better)
