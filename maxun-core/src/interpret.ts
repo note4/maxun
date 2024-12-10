@@ -469,6 +469,16 @@ export default class Interpreter extends EventEmitter {
       }),
     };
 
+    const executeAction = async (invokee: any, methodName: string, args: any) => {
+      console.log("Executing action:", methodName, args);
+      if (!args || Array.isArray(args)) {
+        await (<any>invokee[methodName])(...(args ?? []));
+      } else {
+        await (<any>invokee[methodName])(args);
+      }
+    };
+    
+
     for (const step of steps) {
       this.log(`Launching ${String(step.action)}`, Level.LOG);
 
@@ -486,10 +496,20 @@ export default class Interpreter extends EventEmitter {
           invokee = invokee[level];
         }
 
-        if (!step.args || Array.isArray(step.args)) {
-          await (<any>invokee[methodName])(...(step.args ?? []));
+        if (methodName === 'waitForLoadState') {
+          try {
+            await executeAction(invokee, methodName, step.args);
+          } catch (error) {
+            await executeAction(invokee, methodName, 'domcontentloaded');
+          }
+        } else if (methodName === 'click') {
+          try {
+            await executeAction(invokee, methodName, step.args);
+          } catch (error) {
+            await executeAction(invokee, methodName, [step.args[0], { force: true }]);
+          }
         } else {
-          await (<any>invokee[methodName])(step.args);
+          await executeAction(invokee, methodName, step.args);
         }
       }
 
@@ -571,7 +591,7 @@ export default class Interpreter extends EventEmitter {
               return allResults;
             }
             // Click the 'Load More' button to load additional items
-            await loadMoreButton.click();
+            await loadMoreButton.dispatchEvent('click');
             await page.waitForTimeout(2000); // Wait for new items to load
             // After clicking 'Load More', scroll down to load more items
             await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
