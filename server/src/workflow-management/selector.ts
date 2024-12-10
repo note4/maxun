@@ -6,13 +6,12 @@ import logger from "../logger";
 type Workflow = WorkflowFile["workflow"];
 
 /**
- * Returns a {@link Rectangle} object representing
- * the coordinates, width, height and corner points of the element.
- * If an element is not found, returns null.
+ * Checks the basic info about an element and returns a {@link BaseActionInfo} object.
+ * If the element is not found, returns undefined.
  * @param page The page instance.
  * @param coordinates Coordinates of an element.
  * @category WorkflowManagement-Selectors
- * @returns {Promise<Rectangle|undefined|null>}
+ * @returns {Promise<BaseActionInfo|undefined>}
  */
 export const getElementInformation = async (
   page: Page,
@@ -159,6 +158,15 @@ export const getElementInformation = async (
   }
 };
 
+/**
+ * Returns a {@link Rectangle} object representing
+ * the coordinates, width, height and corner points of the element.
+ * If an element is not found, returns null.
+ * @param page The page instance.
+ * @param coordinates Coordinates of an element.
+ * @category WorkflowManagement-Selectors
+ * @returns {Promise<Rectangle|undefined|null>}
+ */
 export const getRect = async (page: Page, coordinates: Coordinates, listSelector: string) => {
   try {
     if (listSelector !== '') {
