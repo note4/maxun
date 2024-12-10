@@ -541,7 +541,9 @@ export class WorkflowGenerator {
    * @returns {Promise<string|null>}
    */
   private generateSelector = async (page: Page, coordinates: Coordinates, action: ActionType) => {
-    const elementInfo = await getElementInformation(page, coordinates);
+    const elementInfo = await getElementInformation(page, coordinates, this.listSelector);
+
+    console.log(`List selector: ${this.listSelector}`)
 
     const selectorBasedOnCustomAction = (this.getList === true)
       ? await getNonUniqueSelectors(page, coordinates)
@@ -570,9 +572,9 @@ export class WorkflowGenerator {
    * @returns {Promise<void>}
    */
   public generateDataForHighlighter = async (page: Page, coordinates: Coordinates) => {
-    const rect = await getRect(page, coordinates);
+    const rect = await getRect(page, coordinates, this.listSelector);
     const displaySelector = await this.generateSelector(page, coordinates, ActionType.Click);
-    const elementInfo = await getElementInformation(page, coordinates);
+    const elementInfo = await getElementInformation(page, coordinates, this.listSelector);
     if (rect) {
       if (this.getList === true) {
         if (this.listSelector !== '') {
