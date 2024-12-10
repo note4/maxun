@@ -21,7 +21,6 @@ export const getElementInformation = async (
 ) => {
   try {
     if (listSelector !== '') {
-      // Old implementation
       const elementInfo = await page.evaluate(
         async ({ x, y }) => {
           const el = document.elementFromPoint(x, y) as HTMLElement;
@@ -70,7 +69,6 @@ export const getElementInformation = async (
       );
       return elementInfo;
     } else {
-      // New implementation
       const elementInfo = await page.evaluate(
         async ({ x, y }) => {
           const originalEl = document.elementFromPoint(x, y) as HTMLElement;
@@ -83,7 +81,7 @@ export const getElementInformation = async (
               'LEGEND', 'LABEL', 'INPUT', 'BUTTON', 'SELECT', 'DATALIST', 'OPTGROUP', 'OPTION', 'TEXTAREA', 'OUTPUT',
               'PROGRESS', 'METER', 'DETAILS', 'SUMMARY', 'MENU', 'MENUITEM', 'MENUITEM', 'APPLET', 'EMBED', 'OBJECT',
               'PARAM', 'VIDEO', 'AUDIO', 'SOURCE', 'TRACK', 'CANVAS', 'MAP', 'AREA', 'SVG', 'IFRAME', 'FRAME', 'FRAMESET',
-              'LI', 'UL', 'OL', 'DL', 'DT', 'DD', 'HR', 'P', 'PRE', 'LISTING', 'PLAINTEXT'
+              'LI', 'UL', 'OL', 'DL', 'DT', 'DD', 'HR', 'P', 'PRE', 'LISTING', 'PLAINTEXT', 'A'
             ];
             while (element.parentElement) {
               const parentRect = element.parentElement.getBoundingClientRect();
@@ -164,7 +162,6 @@ export const getElementInformation = async (
 export const getRect = async (page: Page, coordinates: Coordinates, listSelector: string) => {
   try {
     if (listSelector !== '') {
-      // Old implementation
       const rect = await page.evaluate(
         async ({ x, y }) => {
           const el = document.elementFromPoint(x, y) as HTMLElement;
@@ -191,7 +188,6 @@ export const getRect = async (page: Page, coordinates: Coordinates, listSelector
       );
       return rect;
     } else {
-      // New implementation
       const rect = await page.evaluate(
         async ({ x, y }) => {
           const originalEl = document.elementFromPoint(x, y) as HTMLElement;
@@ -204,7 +200,7 @@ export const getRect = async (page: Page, coordinates: Coordinates, listSelector
               'LEGEND', 'LABEL', 'INPUT', 'BUTTON', 'SELECT', 'DATALIST', 'OPTGROUP', 'OPTION', 'TEXTAREA', 'OUTPUT',
               'PROGRESS', 'METER', 'DETAILS', 'SUMMARY', 'MENU', 'MENUITEM', 'MENUITEM', 'APPLET', 'EMBED', 'OBJECT',
               'PARAM', 'VIDEO', 'AUDIO', 'SOURCE', 'TRACK', 'CANVAS', 'MAP', 'AREA', 'SVG', 'IFRAME', 'FRAME', 'FRAMESET',
-              'LI', 'UL', 'OL', 'DL', 'DT', 'DD', 'HR', 'P', 'PRE', 'LISTING', 'PLAINTEXT'
+              'LI', 'UL', 'OL', 'DL', 'DT', 'DD', 'HR', 'P', 'PRE', 'LISTING', 'PLAINTEXT', 'A'
             ];
             while (element.parentElement) {
               const parentRect = element.parentElement.getBoundingClientRect();
