@@ -847,15 +847,23 @@ export const getNonUniqueSelectors = async (page: Page, coordinates: Coordinates
       if (!originalEl) return null;
 
       let element = originalEl;
+
+      const containerTags = ['DIV', 'SECTION', 'ARTICLE', 'MAIN', 'HEADER', 'FOOTER', 'NAV', 'ASIDE', 
+        'ADDRESS', 'BLOCKQUOTE', 'DETAILS', 'DIALOG', 'FIGURE', 'FIGCAPTION', 'MAIN', 'MARK', 'SUMMARY', 'TIME',
+        'TABLE', 'THEAD', 'TBODY', 'TFOOT', 'TR', 'TH', 'TD', 'CAPTION', 'COLGROUP', 'COL', 'FORM', 'FIELDSET',
+        'LEGEND', 'LABEL', 'INPUT', 'BUTTON', 'SELECT', 'DATALIST', 'OPTGROUP', 'OPTION', 'TEXTAREA', 'OUTPUT',
+        'PROGRESS', 'METER', 'DETAILS', 'SUMMARY', 'MENU', 'MENUITEM', 'MENUITEM', 'APPLET', 'EMBED', 'OBJECT',
+        'PARAM', 'VIDEO', 'AUDIO', 'SOURCE', 'TRACK', 'CANVAS', 'MAP', 'AREA', 'SVG', 'IFRAME', 'FRAME', 'FRAMESET',
+        'LI', 'UL', 'OL', 'DL', 'DT', 'DD', 'HR', 'P', 'PRE', 'LISTING', 'PLAINTEXT', 'A'
+      ];
       
-      if (originalEl.tagName === 'A') {
-        element = originalEl;
-      } else if (originalEl.parentElement?.tagName === 'A') {
-        element = originalEl.parentElement;
-      } else {
       while (element.parentElement) {
         const parentRect = element.parentElement.getBoundingClientRect();
         const childRect = element.getBoundingClientRect();
+
+        if (!containerTags.includes(element.parentElement.tagName)) {
+          break;
+        }
 
         const fullyContained = 
           parentRect.left <= childRect.left &&
@@ -871,7 +879,6 @@ export const getNonUniqueSelectors = async (page: Page, coordinates: Coordinates
           element = element.parentElement;
         } else {
           break;
-        }
       }
     }
 
