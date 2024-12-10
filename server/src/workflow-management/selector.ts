@@ -3,11 +3,6 @@ import { Coordinates } from "../types";
 import { WhereWhatPair, WorkflowFile } from "maxun-core";
 import logger from "../logger";
 
-/*TODO:
-1. Handle TS errors (here we definetly know better)
-2. Add pending function descriptions + thought process (esp. selector generation)
-*/
-
 type Workflow = WorkflowFile["workflow"];
 
 /**
