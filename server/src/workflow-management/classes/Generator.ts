@@ -542,9 +542,6 @@ export class WorkflowGenerator {
    */
   private generateSelector = async (page: Page, coordinates: Coordinates, action: ActionType) => {
     const elementInfo = await getElementInformation(page, coordinates, this.listSelector);
-
-    console.log(`List selector: ${this.listSelector}`)
-
     const selectorBasedOnCustomAction = (this.getList === true)
       ? await getNonUniqueSelectors(page, coordinates)
       : await getSelectors(page, coordinates);
@@ -580,8 +577,6 @@ export class WorkflowGenerator {
         if (this.listSelector !== '') {
           const childSelectors = await getChildSelectors(page, this.listSelector || '');
           this.socket.emit('highlighter', { rect, selector: displaySelector, elementInfo, childSelectors })
-          console.log(`Child Selectors: ${childSelectors}`)
-          console.log(`Parent Selector: ${this.listSelector}`)
         } else {
           this.socket.emit('highlighter', { rect, selector: displaySelector, elementInfo });
         }
