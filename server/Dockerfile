@@ -50,7 +50,7 @@ RUN apt-get update && apt-get install -y \
 # RUN chmod +x ./start.sh
 
 # Expose the backend port
-EXPOSE 8080
+EXPOSE ${BACKEND_PORT:-8080}
 
 # Start the backend using the start script
 CMD ["npm", "run", "server"]
