@@ -180,7 +180,7 @@ export class RemoteBrowser {
         // await this.currentPage.setExtraHTTPHeaders({
         //     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
         // });
-        const blocker = await PlaywrightBlocker.fromPrebuiltAdsAndTracking(fetch);
+        const blocker = await PlaywrightBlocker.fromLists(fetch, ['https://easylist.to/easylist/easylist.txt']);
         await blocker.enableBlockingInPage(this.currentPage);
         this.client = await this.currentPage.context().newCDPSession(this.currentPage);
         await blocker.disableBlockingInPage(this.currentPage);
