@@ -7,7 +7,7 @@ const options = {
     info: {
       title: 'Maxun API Documentation',
       version: '1.0.0',
-      description: 'API documentation for Maxun (https://github.com/getmaxun/maxun)',
+      description: 'Maxun lets you get the data your robot extracted and run robots via API. All you need to do is input the Maxun API key by clicking Authorize below.',
     },
     components: {
       securitySchemes: {
